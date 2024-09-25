@@ -1,0 +1,28 @@
+<div class="container">
+  <mat-card appearance="outlined">
+    <mat-card-content class="text-center">
+      <h3>Recupero Password</h3>
+      <div class="desc">
+        <p>Per recuperare la password, inserisci l'email con cui ti sei registrato.</p>
+      </div>
+      <form #recoverForm="ngForm" (ngSubmit)="recoverPass(recoverForm)">
+        <div class="row p-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="recover" name="email" placeholder="Email" required email>
+            <mat-error *ngIf="recoverForm.controls['email']?.invalid && recoverForm.controls['email']?.touched">
+              L'email deve essere valida
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="text-center p-3">
+          <button type="submit" mat-stroked-button color="primary" class="w-100" style="margin-bottom: 15px;">
+            <mat-icon>email</mat-icon>
+            <span>Ricevi e-mail di recupero password</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

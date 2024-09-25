@@ -1,0 +1,127 @@
+<div class="container" style="padding: 5% 0 0 0;" *ngIf="wantLogin"> 
+  <mat-card appearance="outlined">
+    <mat-card-content class="text-center "> 
+      <h3>Nome placeholder</h3>
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="user.email" name="email" placeholder="Email" required email>
+          <mat-error *ngIf="loginForm.controls['email']?.invalid && loginForm.controls['email']?.touched">
+            Email deve essere valida
+          </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="row p-3">
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Password</mat-label>
+          <input matInput [(ngModel)]="user.password" type="password" name="password" placeholder="Password" required [type]="hide() ? 'password' : 'text'" >
+          <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()" type="button">
+          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched" >
+            La password deve essere lunga almeno 6 caratteri
+          </mat-error>
+        </mat-form-field>
+      </div>
+    <div class="text-left">
+      <a routerLink="/home/recoverPass" style="text-align: left;" type="button">Password dimenticata?</a>
+    </div>
+    
+    <div class="text-center p-3">
+      <button type="submit" mat-stroked-button color="primary" class="w-100 login-button" style="margin-bottom: 15px;">
+        <mat-icon>login</mat-icon>
+        <span>Login</span>
+      </button>
+      
+      <button mat-stroked-button color="accent" type="button" class="w-100 register-button" (click)="loginOrRegister()">
+        <mat-icon>person_add</mat-icon>
+        <span>Vai a Registrati</span>
+      </button>
+    </div>
+    </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container" *ngIf="!wantLogin">
+  <mat-card appearance="outlined" >
+    <mat-card-content class="text-center ">
+  <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nome</mat-label>
+          <input matInput [(ngModel)]="user.nome" maxlength="50" name="nome" placeholder="Fullname" required>
+        </mat-form-field>
+    </div>
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Cognome</mat-label>
+          <input matInput [(ngModel)]="user.cognome" maxlength="50" name="cognome" placeholder="cognome" required>
+          <mat-error *ngIf="registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched">
+            Il cognome è obbligatorio
+          </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline">
+          <mat-label>Scegli la tua data di nascita</mat-label>
+          <input matInput [matDatepicker]="picker"  [(ngModel)]="user.dataDiNascita"  [max]="maxDate"  name="dataDiNascita" placeholder="Data" required>
+          <mat-hint>GG/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="registerForm.controls['dataDiNascita']?.invalid && registerForm.controls['dataDiNascita']?.touched">
+            La data di nascita è obbligatoria
+          </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="user.email" name="email" placeholder="E-mail" required>
+          <mat-error *ngIf="registerForm.controls['nome']?.invalid && registerForm.controls['nome']?.touched">
+            L'email è obbligatorio
+          </mat-error>
+        </mat-form-field>
+    </div>
+    
+    
+    <div class="row p-3 ">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="user.username" maxlength="30" name="username" placeholder="username" required>
+          <mat-error *ngIf="registerForm.controls['username']?.invalid && registerForm.controls['username']?.touched">
+            Username è obbligatorio
+          </mat-error>
+        </mat-form-field>
+    </div>
+  
+    <div class="text-center p-3">
+    <button type="submit" mat-stroked-button color="primary" class="w-100 login-button" style="margin-bottom: 15px;">
+      <mat-icon>person_add</mat-icon>
+      <span>Registrati</span>
+    </button>
+    
+    <button mat-stroked-button color="accent" type="button" class="w-100 register-button" (click)="loginOrRegister()">
+      <mat-icon>login</mat-icon>
+      <span>Vai a Login</span>
+    </button>
+  </div>
+</form>
+
+      <div *ngIf="wantLogin">
+        <button mat-raised-button class="w-100" style="margin-bottom: 5px;" (click) = "loginOrRegister()">Vai a Login</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+  
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>  
+  
+

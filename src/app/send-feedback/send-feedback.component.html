@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Invia Feedback</h5>
+        </div>
+        <div class="card-body">
+          <form #feedbackForm="ngForm" (ngSubmit)="SendFeedback(feedbackForm)">
+            <div class="mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Inserisci il titolo del feedback</mat-label>
+                <input matInput #input maxlength="30" [(ngModel)]="feedback.titolo" name="titolo" placeholder="Inserisci Titolo, max 30 caratteri" required>
+                <mat-error *ngIf="!feedbackForm.form.controls['titolo']?.valid && feedbackForm.form.controls['titolo']?.touched">
+                  Il titolo è obbligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Inserisci qui il feedback</mat-label>
+                <textarea matInput #input maxlength="250" minlength="30" [(ngModel)]="feedback.contenuto" name="contenuto" placeholder="Inserisci qui il feedback, min 30 caratteri, max 200 caratteri" required rows="4">
+                </textarea>
+                <mat-error *ngIf="!feedbackForm.form.controls['contenuto']?.valid && feedbackForm.form.controls['contenuto']?.touched">
+                  Il contenuto deve avere minimo 30 caratteri
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Scegli almeno un contesto</mat-label>
+                <mat-select [(ngModel)]="feedback.contesto" name="contesti" required>
+                  <mat-option *ngFor="let contesto of listaContesti" [value]="contesto.definizione">
+                    {{contesto.definizione}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!feedbackForm.form.controls['contesto']?.valid && feedbackForm.form.controls['contesto']?.touched">
+                  Scegli un contesto
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Invia Feedback</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

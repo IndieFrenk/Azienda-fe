@@ -1,0 +1,8 @@
+.text-success{
+    color: greenyellow;
+}
+canvas {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+  }

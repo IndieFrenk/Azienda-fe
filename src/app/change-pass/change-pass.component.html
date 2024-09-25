@@ -1,0 +1,74 @@
+<div class="container">
+  <mat-card appearance="outlined">
+    <mat-card-content class="text-center">
+      <h3>Cambia Password</h3>
+      <form #changePassForm="ngForm" [formGroup]="passwordForm" (ngSubmit)="changePass(passwordForm)">
+        <div class="row p-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Password Attuale</mat-label>
+            <input matInput formControlName="password" placeholder="Inserisci Password" required [type]="hide() ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()" type="button">
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('password')?.hasError('required')">
+              La password è obbligatoria
+            </mat-error>
+            <mat-error *ngIf="passwordForm.get('password')?.hasError('minlength')">
+              La password deve essere lunga almeno 6 caratteri
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row p-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nuova Password</mat-label>
+            <input matInput formControlName="newPassword" placeholder="Inserisci nuova Password" required [type]="hide() ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()" type="button">
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+              La nuova password è obbligatoria
+            </mat-error>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+              La nuova password deve essere lunga almeno 6 caratteri
+            </mat-error>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('passwordStrength')">
+              La password non soddisfa i requisiti di sicurezza
+            </mat-error>
+            
+          </mat-form-field>
+          <div class="password-requirements">
+            <div *ngFor="let req of passwordRequirements" class="requirement">
+              <mat-icon [color]="req.check(passwordForm.get('newPassword')?.value) ? 'primary' : 'warn'">
+                {{req.check(passwordForm.get('newPassword')?.value) ? 'check' : 'close'}}
+              </mat-icon>
+              {{req.label}}
+            </div>
+          </div>
+        </div>
+        <div class="row p-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Conferma Password</mat-label>
+            <input matInput formControlName="confirmPassword" placeholder="Conferma Password" required [type]="hide() ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()" type="button">
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('required')">
+              La conferma della password è obbligatoria
+            </mat-error>
+            <mat-error *ngIf="passwordForm.hasError('passwordMismatch')">
+              Le password non corrispondono
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="text-center p-3">
+          <button type="submit" mat-stroked-button color="primary" class="w-100" [disabled]="passwordForm.invalid">
+            <mat-icon>lock</mat-icon>
+            <span>Cambia Password</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+

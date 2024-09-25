@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 style="border: 1px;text-align: left;">Elenco Feedback</h5>
+        </div>
+        <div class="card-body">
+          <form #searchForm="ngForm" (ngSubmit)="searchFeedback(searchForm)">
+            <div class="row ">
+              <div class="col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Ricerca</mat-label>
+                  <input matInput #input maxlength="200" [(ngModel)]="search.contenuto" name="contenuto" placeholder="Inserisci un contenuto da ricercare, massimo 200 caratteri" rows="3">
+                
+                </mat-form-field>
+              </div>
+              <div class="col-md-4 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Data</mat-label>
+                  <input matInput [matDatepicker]="picker" [(ngModel)]="search.data" name="data" placeholder="Data">
+                  <mat-hint>GG/MM/AAAA</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div> 
+              <div class="col-md-2   justify-content-md-end">
+                <button class="btn btn-primary w-100 p-3" type="submit">Cerca</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 style="border: 1px;text-align: left;">Risultati Feedback</h5>
+        </div>
+        <div class="card-body no-border">
+          <div class="table-responsive">
+            <table #feedbackTable mat-table [dataSource]="feedbackTableData" class="mat-elevation-z8 w-100" style="border-radius: 5px;" matSort>
+              <ng-container matColumnDef="Titolo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="titolo"> Titolo </th>
+                <td mat-cell *matCellDef="let element"> <b>{{element.titolo}}</b> </td>
+              </ng-container>
+              <ng-container matColumnDef="Contenuto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="contenuto"> Contenuto </th>
+                <td mat-cell *matCellDef="let element" class="truncate"> {{element.contenuto.length > 30 ? (element.contenuto | slice:0:30) + '...' : element.contenuto}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Utente">
+                <th mat-header-cell *matHeaderCellDef > Utente </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Data">
+                <th mat-header-cell *matHeaderCellDef > Data </th>
+                <td mat-cell *matCellDef="let element"> {{element.dataSottomissione | date:'HH:mm - dd-MM-yyyy '}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Contesti">
+                <th mat-header-cell *matHeaderCellDef> Contesti </th>
+                <td mat-cell *matCellDef="let element">
+                  <p *ngFor="let contesto of element.contesto">
+                    {{ contesto.definizione }}
+                  </p>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Risposte">
+                <th mat-header-cell *matHeaderCellDef> Risposte </th>
+                <td mat-cell *matCellDef="let element"> 
+                  <button mat-icon-button color="primary" (click)="visualizza(element.id)">
+                    <mat-icon>reply</mat-icon>
+                  </button>
+                  <button mat-icon-button color="primary" (click)="delete(element.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsFeedback"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsFeedback;"></tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="container mt-1">
+    <div class="row w-100 ">
+        <div class="col-12 ">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><b>{{ feedback.titolo }}</b></h5>
+                    <small>{{ feedback.dataSottomissione | date:'medium' }}</small><br>
+                    <small>{{ feedback.email }}</small>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ feedback.contenuto }}</p>
+
+                    <div class="d-flex mt-4">
+                        <p class="mb-2 me-2">Contesti:</p>
+                        <span *ngFor="let contesto of feedback.contesto" class="badge bg-secondary me-2 mb-2">
+                            {{ contesto.definizione }}
+                        </span>
+                      
+                    </div>
+                </div>
+                <div *ngIf="isAdmin()" class="card-footer d-flex justify-content-end">
+                    <button  color="warn" class="btn btn-secondary" (click)="deleteFeedback(feedback.id)">
+                        Cancella feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div *ngIf="rispostaPresente || isAdmin()" class="row w-100">
+        <div *ngIf="isAdmin()" class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header ">
+                    <h5 class="mb-0">Rispondi al Feedback</h5>
+                </div>
+                <div class="card-body">
+                    <form #rispForm="ngForm" (ngSubmit)="inviaRisposta(rispForm)">
+                        <div class="col-12">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Rispondi</mat-label>
+                                <input matInput [(ngModel)]="risposta.contenuto" name="contenuto" placeholder="Contenuto">
+                            </mat-form-field>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit"  color="primary" class="submit-button btn btn-primary">
+                                Invia
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div *ngFor="let element of rispList" class="card mb-4 slide-in-bottom">
+                <div class="card-body ">
+                    <b style="font-size: larger;">{{element.email}}</b>
+                    <p>{{element.contenuto}}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p>{{element.dataSottomissione | date:'HH:mm - dd-MM-yyyy '}}</p>
+                        <button mat-icon-button color="primary" *ngIf="isAdmin()" (click)="delete(element.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
