@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card mb-4">
         <div class="card-header">
-          <h5 style="border: 1px;text-align: left;">Elenco Utenti </h5>
+          <h5 style="border: 1px;text-align: left;">Elenco di tutti gli utenti registrati </h5>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -24,7 +24,7 @@
               <ng-container matColumnDef="Azioni">
                 <th mat-header-cell *matHeaderCellDef> Azioni </th>
                 <td mat-cell *matCellDef="let element">   
-                  <button mat-icon-button color="primary" (click)="visualizzaPerUtente(element.id)">
+                  <button mat-icon-button color="primary" (click)="visualizzaPerUtente(element.id)" data-toggle="tooltip" data-placement="top" title="Vedi i feedback correlati">
                     <mat-icon> folder_open </mat-icon>
                   </button>
                 </td>

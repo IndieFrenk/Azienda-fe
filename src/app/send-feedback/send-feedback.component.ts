@@ -34,7 +34,8 @@ export class SendFeedbackComponent implements OnInit {
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: false
   }
   searchKey = ''
 

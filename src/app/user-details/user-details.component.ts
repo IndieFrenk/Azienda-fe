@@ -31,7 +31,8 @@ export class UserDetailsComponent {
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: false
   }
   constructor(
     private activatedRoute: ActivatedRoute,
