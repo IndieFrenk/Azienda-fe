@@ -5,5 +5,6 @@ export interface Feedback {
     email: string ;
     contesto: any[];
     dataSottomissione: string;
+    stato: boolean;
     
 }

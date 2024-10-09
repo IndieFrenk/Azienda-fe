@@ -18,7 +18,6 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
-import { MY_DATE_FORMATS } from './custom-date-format';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import {MatMenuModule} from '@angular/material/menu';
@@ -43,6 +42,10 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { FooterComponent } from './footer/footer.component';
 import { UserPageComponent } from './user-page/user-page.component';
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,

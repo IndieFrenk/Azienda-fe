@@ -6,3 +6,6 @@ canvas {
     height: auto !important;
     display: block;
   }
+  .mat-calendar-body-label{
+    opacity: 0;
+  }

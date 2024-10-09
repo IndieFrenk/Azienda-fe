@@ -61,4 +61,7 @@ export class FeedbackService {
   public deleteContesto(id: number) {
     return this.httpClient.delete("http://localhost:8080/feedback/contesto/delete/"+id, httpOptions)
   }
+  public changeStatus(id: number){
+    return this.httpClient.post("http://localhost:8080/feedback/status/"+id, httpOptions);
+  }
 }
