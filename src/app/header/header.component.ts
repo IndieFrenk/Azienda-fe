@@ -10,6 +10,7 @@ import { StorageService } from '../_services/storage.service';
 })
 export class HeaderComponent {
   
+  admin: boolean = false
   constructor( private router:Router,
     private authService: AuthService,
     private storageService: StorageService
@@ -34,7 +35,7 @@ export class HeaderComponent {
   public logout(){
     this.storageService.clean()
     localStorage.clear()
-    this.router.navigate(["home/login"])
+    this.router.navigate(["home"])
   }
 
 }

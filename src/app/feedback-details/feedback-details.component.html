@@ -18,10 +18,23 @@
                       
                     </div>
                 </div>
-                <div *ngIf="isAdmin()" class="card-footer d-flex justify-content-end">
-                    <button  color="warn" class="btn btn-secondary" (click)="deleteFeedback(feedback.id)">
-                        Cancella feedback
-                    </button>
+                <div *ngIf="isAdmin()" class="card-footer d-flex flex-row justify-content-between  ">
+                    <div class="align-self-center">
+                    <p *ngIf="!statoThread" class="mb-0" ><i class="bi bi-archive h5"></i> Il thread è stato archiviato e non è più possibile rispondere</p>
+                </div>
+                    <div class="btn-group mr-2 ml-auto" role="group" aria-label="First group">
+                        <button *ngIf="statoThread" class="btn btn-success " (click)="changeStatus()" data-toggle="tooltip" data-placement="top" title="Chiude il thread e non permette nessun'altra risposta">
+                            <i class="bi bi-archive"></i>
+                        </button>
+                        
+                        <button *ngIf="!statoThread" class="btn btn-warning " (click)="changeStatus()" data-toggle="tooltip" data-placement="top" title="Riapri il thread" >
+                            <i class="bi bi-archive"></i>
+                        </button>
+                        <button class="btn btn-danger" (click)="deleteFeedback(feedback.id)" data-toggle="tooltip" data-placement="top" title="Cancella l'intero thread"> 
+                            <i class="bi bi-trash"></i>
+                         </button>
+                      </div>
+                    
                 </div>
             </div>
         </div>
@@ -30,22 +43,22 @@
 
 <div class="container">
     <div *ngIf="rispostaPresente || isAdmin()" class="row w-100">
-        <div *ngIf="isAdmin()" class="col-12 mb-4">
+        <div class="col-12 mb-4" *ngIf="statoThread">
             <div class="card">
                 <div class="card-header ">
-                    <h5 class="mb-0">Rispondi al Feedback</h5>
+                    <h5 class="mb-0">Risposte</h5>
                 </div>
                 <div class="card-body">
                     <form #rispForm="ngForm" (ngSubmit)="inviaRisposta(rispForm)">
                         <div class="col-12">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Rispondi</mat-label>
-                                <input matInput [(ngModel)]="risposta.contenuto" name="contenuto" placeholder="Contenuto">
+                                <mat-label>Rispondi qui</mat-label>
+                                <input matInput maxlength="1500" [(ngModel)]="risposta.contenuto" name="contenuto" placeholder="Inserisci qui la risposta, max 1500 caratteri">
                             </mat-form-field>
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button type="submit"  color="primary" class="submit-button btn btn-primary">
-                                Invia
+                            <button  type="submit"  color="primary" data-toggle="tooltip" data-placement="top" title="Invia risposta" class="submit-button btn btn-outline-primary">
+                                Invia <i class="bi bi-send" style="padding: 5px;"></i>
                             </button>
                         </div>
                     </form>
@@ -60,9 +73,11 @@
                     <p>{{element.contenuto}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <p>{{element.dataSottomissione | date:'HH:mm - dd-MM-yyyy '}}</p>
-                        <button mat-icon-button color="primary" *ngIf="isAdmin()" (click)="delete(element.id)">
-                            <mat-icon>delete</mat-icon>
+                        <div *ngIf="statoThread">
+                        <button class="btn btn-outline-primary"  color="primary"  *ngIf="isAdmin() " (click)="delete(element.id)" data-toggle="tooltip" data-placement="top" title="Cancella la risposta">
+                            <i class="bi bi-trash"></i>
                         </button>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -72,6 +87,6 @@
 
 <div class="loading-overlay" *ngIf="isLoading">
     <div class="spinner-container">
-        <mat-spinner></mat-spinner>
+        <div class="loader"></div>
     </div>
 </div>

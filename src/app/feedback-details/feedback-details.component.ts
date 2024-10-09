@@ -8,6 +8,7 @@ import { Risposta } from '../_models/risposta.model';
 import { StorageService } from '../_services/storage.service';
 import { User } from '../_models/user.model';
 import {Location} from '@angular/common';
+declare var $: any;
 
 @Component({
   selector: 'app-feedback-details',
@@ -23,7 +24,8 @@ export class FeedbackDetailsComponent {
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: true
   }
   listaContesti: Contesto[] =[];
   contesto: Contesto ={
@@ -38,6 +40,7 @@ export class FeedbackDetailsComponent {
     user_id: 0,
     feedback_id: 0
   }
+  statoThread: boolean = false
   feedbackId = 0
   displayedColumns: string[] = ['Contenuto', 'Data'];
   selectedProductIndex = 0;
@@ -47,7 +50,7 @@ export class FeedbackDetailsComponent {
     private router: Router,
     private feedbackService: FeedbackService,
     private storageService: StorageService,
-    private location: Location) { }
+    private location: Location) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -59,9 +62,21 @@ export class FeedbackDetailsComponent {
       } else {
         console.log("The feedback doesn't exist");
       }
-    });
-    
+    },
+  );
+  setTimeout(() => this.initTooltips(), 100);
   }
+  ngAfterViewInit(): void {
+    
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+}
+ 
+  private initTooltips(): void {
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
    isAdmin(){ //metodo temporaneo 
     if(this.storageService.getIdValue()?.email == "admin@mail") {
       return true
@@ -70,7 +85,9 @@ export class FeedbackDetailsComponent {
       return false
     }
    }
- 
+   private destroyTooltips(): void {
+    $('[data-toggle="tooltip"]').tooltip('dispose');
+  }
   deleteFeedback(id:number){
     this.feedbackService.deleteFeedback(id).subscribe(
       (resp)=> {
@@ -87,13 +104,28 @@ export class FeedbackDetailsComponent {
       }
     )
   }
+  changeStatus(){
+    this.destroyTooltips();
+    this.feedbackService.changeStatus(this.feedback.id).subscribe(
+      (resp)=> {
+        this.getFeedback(this.feedbackId)
+        console.log(resp)
+        setTimeout(() => this.initTooltips(), 100);
+      },
+      (err) =>{
+        console.log(err)
+      }
+    )
+  }
    delete(id: number) {
+    this.destroyTooltips();
     const index = this.rispList.findIndex(x=> x.id === id)
       this.rispList.splice(index,1)
       this.rispList = [...this.rispList]
     this.feedbackService.deleteRisposta(id).subscribe(
       (resp)=> {
         console.log(resp)
+        setTimeout(() => this.initTooltips(), 100);
       },
       (err) =>{
         console.log(err)
@@ -146,9 +178,11 @@ export class FeedbackDetailsComponent {
           contenuto: resp.contenuto,
           email: resp.email,
           contesto: resp.contesto, 
-          dataSottomissione: resp.dataSottomissione 
+          dataSottomissione: resp.dataSottomissione ,
+          stato: resp.stato
         };
-        console.log(this.feedback);
+        this.statoThread = resp.stato
+        console.log(this.statoThread);
       },
       (err) =>{
         console.log(err)

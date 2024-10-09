@@ -20,7 +20,7 @@
             <div class="mb-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Inserisci qui il feedback</mat-label>
-                <textarea matInput #input maxlength="250" minlength="30" [(ngModel)]="feedback.contenuto" name="contenuto" placeholder="Inserisci qui il feedback, min 30 caratteri, max 200 caratteri" required rows="4">
+                <textarea matInput #input maxlength="1500" minlength="30" [(ngModel)]="feedback.contenuto" name="contenuto" placeholder="Inserisci qui il feedback, min 30 caratteri, max 1500 caratteri" required rows="4">
                 </textarea>
                 <mat-error *ngIf="!feedbackForm.form.controls['contenuto']?.valid && feedbackForm.form.controls['contenuto']?.touched">
                   Il contenuto deve avere minimo 30 caratteri
@@ -42,8 +42,8 @@
               </mat-form-field>
             </div>
             
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">Invia Feedback</button>
+            <div class="d-grid" style="justify-content: center;">
+              <button type="submit" class="btn btn-primary btn-lg" >Invia Feedback <i class="bi bi-send" style="padding: 5px;"> </i> </button>
             </div>
           </form>
         </div>

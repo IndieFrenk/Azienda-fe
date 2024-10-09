@@ -1,7 +1,8 @@
 <div class="container" style="padding: 5% 0 0 0;" *ngIf="wantLogin"> 
   <mat-card appearance="outlined">
     <mat-card-content class="text-center "> 
-      <h3>Nome placeholder</h3>
+      <h3 class="mb-0">Accedi</h3>
+      <p>Inserisci le tue credenziali di accesso</p>
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
     <div class="row p-3 ">
         <mat-form-field appearance="outline" class="w-100">
@@ -18,7 +19,7 @@
           <mat-label>Password</mat-label>
           <input matInput [(ngModel)]="user.password" type="password" name="password" placeholder="Password" required [type]="hide() ? 'password' : 'text'" >
           <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()" type="button">
-          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <i [class]="hide() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
           </button>
           <mat-error *ngIf="loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched" >
             La password deve essere lunga almeno 6 caratteri
@@ -31,13 +32,13 @@
     
     <div class="text-center p-3">
       <button type="submit" mat-stroked-button color="primary" class="w-100 login-button" style="margin-bottom: 15px;">
-        <mat-icon>login</mat-icon>
-        <span>Login</span>
+        <i class="bi bi-box-arrow-in-right h5 mr-3"></i> 
+        <span> Login</span>
       </button>
       
       <button mat-stroked-button color="accent" type="button" class="w-100 register-button" (click)="loginOrRegister()">
-        <mat-icon>person_add</mat-icon>
-        <span>Vai a Registrati</span>
+        <i class="bi bi-person-plus-fill h5 mr-3"></i>
+        <span> Vai a Registrati</span>
       </button>
     </div>
     </form>
@@ -48,6 +49,8 @@
 <div class="container" *ngIf="!wantLogin">
   <mat-card appearance="outlined" >
     <mat-card-content class="text-center ">
+      <h3 class="mb-0">Registrati</h3>
+      <p>Inserisci i dati di registrazione</p>
   <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
     <div class="row p-3 ">
         <mat-form-field appearance="outline" class="w-100">
@@ -99,13 +102,13 @@
   
     <div class="text-center p-3">
     <button type="submit" mat-stroked-button color="primary" class="w-100 login-button" style="margin-bottom: 15px;">
-      <mat-icon>person_add</mat-icon>
-      <span>Registrati</span>
+      <i class="bi bi-person-plus-fill h5 mr-2"></i>
+      <span> Registrati</span>
     </button>
     
     <button mat-stroked-button color="accent" type="button" class="w-100 register-button" (click)="loginOrRegister()">
-      <mat-icon>login</mat-icon>
-      <span>Vai a Login</span>
+      <i class="bi bi-box-arrow-in-right h5 mr-2"></i> 
+      <span> Vai a Login</span>
     </button>
   </div>
 </form>
@@ -120,7 +123,7 @@
   
 <div class="loading-overlay" *ngIf="isLoading">
   <div class="spinner-container">
-    <mat-spinner></mat-spinner>
+    <div class="loader"></div>
   </div>
 </div>  
   

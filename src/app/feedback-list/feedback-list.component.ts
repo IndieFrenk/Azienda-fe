@@ -33,7 +33,8 @@ export class FeedbackListComponent {
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: false
   }
 
   constructor(

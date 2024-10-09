@@ -34,7 +34,8 @@ export class UserComponent implements OnInit{
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: false
   }
   feedbackSorted: Feedback[] = [];
   searchKey = ''

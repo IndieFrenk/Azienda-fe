@@ -14,9 +14,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Chart, registerables } from 'chart.js';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { CUSTOM_DATE_FORMATS, CustomDateAdapter } from '../custom-date-adapter';
-
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 
 Chart.register(...registerables);
 interface FeedbackDataPoint {
@@ -28,8 +26,6 @@ interface FeedbackDataPoint {
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'it-IT' }  // Set locale to Italian
   ]
 })
@@ -61,7 +57,8 @@ export class AdminComponent  {
     contenuto:'',
     email: '',
     contesto: [], 
-    dataSottomissione: ''
+    dataSottomissione: '',
+    stato: false
   }
   feedbackOggi = 0
   constructor(
@@ -77,7 +74,7 @@ export class AdminComponent  {
     startDate: [''],
     endDate: ['']
     });
-    this.dateAdapter.setLocale('it-IT');  // Set locale to Italian
+    this.dateAdapter.setLocale('it-IT'); 
 }
 
   singleUser: boolean = false;
@@ -100,7 +97,6 @@ export class AdminComponent  {
       this.createChart();
     }
     this.feedbackTableData.sort = this.sortFeed;
-    
   }
   //Grafico
   loadFeedbackData() {

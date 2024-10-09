@@ -5,3 +5,35 @@
   padding-left: 30px;
   padding-right: 30px;
 }
+.dropdown-menu a {
+	color: #212529 !important;
+}
+
+.dropdown-menu a::before {
+  background-color: #212529 !important;
+}
+
+.navbar-nav a {
+  color: #eeeeee;
+  position: relative;
+  text-decoration: none;
+}
+
+.navbar-nav a::before {
+  content: '';
+  position: absolute;
+  width: 88%;
+  height: 4px;
+  border-radius: 4px;
+  background-color: #eeeeee;
+  bottom: 0;
+  left: 1;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+.navbar-nav a:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}

@@ -11,39 +11,39 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="home">Home</a>
+            <a class="nav-link active" aria-current="page" href="home"> <i class="bi bi-house-fill h5"></i> Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Prodotti</a>
+            <a class="nav-link" href="#"><i class="bi bi-bag-fill h5"></i> Prodotti</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Servizi</a>
+            <a class="nav-link" href="#"><i class="bi bi-person-square h5"></i> Servizi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contatti</a>
+            <a class="nav-link" href="#"><i class="bi bi-telephone h5"></i> Contatti</a>
           </li>
           <li *ngIf="!isAdmin() " class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" style="border-radius: 1px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-pencil-square h5"></i> 
               Feedback
             </a>
             <ul class="dropdown-menu">
-              <li><a *ngIf="isLoggedin()" class="dropdown-item" href="home/user/myFeedback">I miei Feedback</a></li>
-              <li><a  class="dropdown-item" href="home/sendFeedback">Invia un nuovo feedback</a></li>
+              <li><a *ngIf="isLoggedin()" class="dropdown-item" href="home/user/myFeedback"><i class="bi bi-chat-left-text"></i> I miei Feedback</a></li>
+              <li><a  class="dropdown-item" href="home/sendFeedback"><i class="bi bi-pencil-fill "></i> Invia un nuovo feedback</a></li>
             </ul>
           </li>
         </ul>
         <ul class="navbar-nav">
           <a *ngIf="!isLoggedin()" class="nav-link " href="home/login" role="button" aria-expanded="false">
-              <i class="bi bi-person-circle"></i> Login
+              Login <i class="bi bi-box-arrow-in-right h5"></i>
           </a>
           <li  *ngIf="isLoggedin() && !isAdmin()" class="nav-item dropdown">
             
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle"></i> Profilo
+              <i class="bi bi-person-circle h3"></i> Profilo
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="home/user">Il mio profilo</a></li>
-              <li><a class="dropdown-item" (click)="logout()">Esci</a></li>
+              <li><a class="dropdown-item" href="home/user"> <i class="bi bi-person-lines-fill"></i> Il mio profilo</a></li>
+              <li><a class="dropdown-item" (click)="logout()">  <i class="bi bi-box-arrow-right"></i> Esci</a></li>
             </ul>
           </li>
           <li *ngIf="isLoggedin() && isAdmin()" class="nav-item dropdown">
@@ -52,9 +52,9 @@
               <i class="bi bi-person-circle"></i> Profilo
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="home/admin">Dashboard Admin</a></li>
-              <li><a class="dropdown-item" href="home/admin/userList">Lista utenti</a></li>
-              <li><a class="dropdown-item" (click)="logout()">Esci</a></li>
+              <li><a class="dropdown-item" href="home/admin"><i class="bi bi-clipboard-data"></i> Dashboard Admin</a></li>
+              <li><a class="dropdown-item" href="home/admin/userList"> <i class="bi bi-person-lines-fill"></i> Lista utenti</a></li>
+              <li><a class="dropdown-item" (click)="logout()"> <i class="bi bi-box-arrow-right"></i> Esci</a></li>
             </ul>
           </li>
         </ul>
