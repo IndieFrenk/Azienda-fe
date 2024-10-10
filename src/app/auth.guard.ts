@@ -50,8 +50,6 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     this.previousUrl = route.pathFromRoot.map(segment => segment.url.map(urlSegment => urlSegment.path).join('/'))
     .join('/');
-
-    console.log(this.previousUrl)
     const user = this.storageService.getIdValue()?.email;
     const requiredRole = route.data['role'] as string;
     if (user === "admin@mail") {

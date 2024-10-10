@@ -45,7 +45,7 @@
             <table #feedbackTable mat-table [dataSource]="feedbackTableData" class="mat-elevation-z8 w-100" style="border-radius: 5px;" matSort>
               <ng-container matColumnDef="Titolo">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header="titolo"> Titolo </th>
-                <td mat-cell *matCellDef="let element"> <b>{{element.titolo}}</b> </td>
+                <td mat-cell  *matCellDef="let element"> <b>{{element.titolo}}</b> </td>
               </ng-container>
               <ng-container matColumnDef="Contenuto">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header="contenuto"> Contenuto </th>
@@ -56,7 +56,7 @@
                 <td mat-cell *matCellDef="let element"> {{element.email}} </td>
               </ng-container>
               <ng-container matColumnDef="Data">
-                <th mat-header-cell *matHeaderCellDef > Data </th>
+                <th mat-header-cell *matHeaderCellDef  > Data </th>
                 <td mat-cell *matCellDef="let element"> {{element.dataSottomissione | date:'HH:mm - dd-MM-yyyy '}} </td>
               </ng-container>
               <ng-container matColumnDef="Contesti">

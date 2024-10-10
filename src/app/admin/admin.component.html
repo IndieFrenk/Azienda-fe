@@ -41,7 +41,8 @@
               <th mat-header-cell *matHeaderCellDef> Azioni </th>
               <td mat-cell *matCellDef="let element">
                 <button mat-icon-button color="primary" (click)="deleteCont(element.id)">
-                  <mat-icon> delete </mat-icon>
+                  <i class="bi bi-trash"></i>
+                  
                 </button>
               </td>
             </ng-container>
@@ -164,10 +165,10 @@
               </p></td>
             </ng-container>
             <ng-container matColumnDef="Risposte">
-              <th mat-header-cell *matHeaderCellDef> Risposte </th>
+              <th mat-header-cell *matHeaderCellDef> Azioni </th>
               <td mat-cell *matCellDef="let element"> 
                 <button mat-icon-button color="primary" (click)="visualizza(element.id)" >
-                <mat-icon> reply </mat-icon>
+                  <i class="bi bi-envelope-paper"></i>
               </button>
               
             </td>

@@ -1,10 +1,25 @@
+@media screen and (max-width: 768px) {
+ .navbar-nav a::before {
+    display: none;
+  }
+  
+  .navbar-nav a:hover::before {
+    display: none;
+  }
+}
 
 .sfondo-header{
   background-color: #212529 ;
   color: aliceblue;
   padding-left: 30px;
   padding-right: 30px;
+  position: fixed;
+  z-index: 1030;
+  top: 0;
+  left: 0;
+  right: 0;
 }
+
 .dropdown-menu a {
 	color: #212529 !important;
 }
@@ -37,3 +52,4 @@
   transform-origin: left;
   transform: scaleX(1);
 }
+

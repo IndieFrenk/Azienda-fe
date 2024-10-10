@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.hideHeader = (event.url === '/home/login'); 
+        this.hideHeader = /^\/home\/login\/?.*$/.test(event.url);
        if ( event.url === '/home' )
         this.hideFooter = true;
       else this.hideFooter = false;

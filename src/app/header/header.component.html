@@ -17,7 +17,11 @@
             <a class="nav-link" href="#"><i class="bi bi-bag-fill h5"></i> Prodotti</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-person-square h5"></i> Servizi</a>
+            <a class="nav-link" data-mdb-toggle="animation"
+            data-mdb-animation="slide-in-left"
+            data-mdb-animation-start="onScroll"
+            data-mdb-animation-on-scroll="repeat"
+            href="#"><i class="bi bi-person-square h5"></i> Servizi</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"><i class="bi bi-telephone h5"></i> Contatti</a>
@@ -39,7 +43,7 @@
           <li  *ngIf="isLoggedin() && !isAdmin()" class="nav-item dropdown">
             
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle h3"></i> Profilo
+              <i class="bi bi-person-circle h5"></i> Profilo
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="home/user"> <i class="bi bi-person-lines-fill"></i> Il mio profilo</a></li>
@@ -61,4 +65,5 @@
       </div>
     </div>
   </nav>
+  
 </header>

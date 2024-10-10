@@ -55,7 +55,7 @@ export class StorageService {
         return null;
       }
     } else {
-      console.warn('localStorage is not available');
+      //console.warn('localStorage is not available');
       return null;
     }
   }

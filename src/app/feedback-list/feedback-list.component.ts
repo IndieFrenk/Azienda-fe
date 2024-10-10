@@ -86,6 +86,7 @@ export class FeedbackListComponent {
     }
   )
 }
+
   visualizza(id:number) {
   this.router.navigate(['home/feedback', {Id: id}])
   }

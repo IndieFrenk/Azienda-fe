@@ -5,7 +5,7 @@
   
 }
 
-/* Media query per schermi più grandi (desktop) */
+
 @media screen and (min-width: 768px) {
   .container {
     width: 50%; 
