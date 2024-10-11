@@ -1,8 +1,4 @@
-@scroll-timeline slide-in-timeline {
-  source: auto;
-  orientation: block;
-  scroll-offsets: 0%, 100%;
-}
+
 
 .slide-in-right {
   animation: slide-in-right 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s both;
@@ -63,6 +59,7 @@
 .background {
   max-width: 100%;
   height: auto;
+  max-height: 600px;
   box-shadow: inset 0px 25px 31px 2px #FFFFFF, 0px 11px 15px 1px rgba(0,0,0,0.4);
   transition: all 0.3s ease;
 }
@@ -85,23 +82,47 @@
   display: block;
   transition: transform 0.3s ease;
 }
-
+.button-container{
+  transition: transform 0.3s ease;
+}
 .image2 {
   position: absolute;
-  height: 80%;
+  height: 50%;
   width: auto;
   object-fit: contain;
   left: 50%;
+  margin-bottom: 100px;
   transform: translateX(-50%);
   transition: all 0.3s ease;
+  opacity: 1;
+  z-index: 10000;
 }
-
+.image2.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50px) scale(0.15);
+ 
+}
 .parent:hover .image1 {
   transform: scale(1.05);
 }
 
-.parent:hover .image2 {
+.parent:hover .image2:not(.fade-out) {
   transform: translateX(-50%) scale(1.1);
+}
+
+.parent:hover .button-container {
+  transform: scale(1.5);
+  transform: translateX(-50%) scale(1.1);
+}
+.button-container.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50px) scale(0.15);
+ 
+}
+.image1.fade-out {
+  opacity: 0;
+  transform: translateY(-50%) ;
+ 
 }
 
 .btn-primary {
@@ -169,4 +190,81 @@ p { animation-delay: 0.6s; }
 .content-section:hover .col-lg-8,
 .content-section:hover .col-lg-4 {
   transform: translateX(10px);
+}
+.button-container {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.btn-custom {
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.btn-filled {
+  background-color: #eeeeee;
+  border-color: #eeeeee;
+  color: #272529;
+}
+
+.btn-filled:hover {
+  background-color: #272529;
+  color: white;
+  border: 2px solid #272529;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #272529;
+  border: 2px solid #272529;
+}
+
+.btn-outline:hover {
+  background-color: #272529;
+  color: #eeeeee;
+}
+@media screen and (max-width: 991px) {
+  .navbar-brand {
+    position: static;
+    margin: 10px auto;
+    display: block;
+    transform: none;
+  }
+  .navbar-brand {
+    opacity: 1;
+  }
+  .navbar-nav a::before,
+  .navbar-nav a:hover::before {
+    display: none;
+  }
+  .button-container {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+  .btn-outline {
+    background-color: #eeeeee;
+    border-color: #eeeeee;
+    color: #272529;
+  }
+  .btn-outline:hover {
+    background-color: #272529;
+    color: #eeeeee;
+    border-color: #272529;
+    
+  }
+  .image2 {
+    z-index: 0;
+  }
+  .col-lg-4 {
+    padding: 10px;
+  }
 }

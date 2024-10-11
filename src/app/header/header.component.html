@@ -1,69 +1,61 @@
-
 <header class="text-bg-dark sfondo-header">
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="home">
-        <img src="logo.png" alt="Logo" width="45" height="45" class="d-inline-block align-text-top">
-      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="home"> <i class="bi bi-house-fill h5"></i> Home</a>
+            <a class="nav-link active" aria-current="page" href="home"><i class="bi bi-house-fill"></i> Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bag-fill h5"></i> Prodotti</a>
+            <a class="nav-link" href="#"><i class="bi bi-bag-fill"></i> Prodotti</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-mdb-toggle="animation"
-            data-mdb-animation="slide-in-left"
-            data-mdb-animation-start="onScroll"
-            data-mdb-animation-on-scroll="repeat"
-            href="#"><i class="bi bi-person-square h5"></i> Servizi</a>
+            <a class="nav-link" href="#"><i class="bi bi-person-square"></i> Servizi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-telephone h5"></i> Contatti</a>
+            <a class="nav-link" href="#"><i class="bi bi-telephone"></i> Contatti</a>
           </li>
-          <li *ngIf="!isAdmin() " class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" style="border-radius: 1px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-pencil-square h5"></i> 
-              Feedback
+          <li *ngIf="!isAdmin()" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-pencil-square"></i> Feedback
             </a>
             <ul class="dropdown-menu">
               <li><a *ngIf="isLoggedin()" class="dropdown-item" href="home/user/myFeedback"><i class="bi bi-chat-left-text"></i> I miei Feedback</a></li>
-              <li><a  class="dropdown-item" href="home/sendFeedback"><i class="bi bi-pencil-fill "></i> Invia un nuovo feedback</a></li>
+              <li><a class="dropdown-item" href="home/sendFeedback"><i class="bi bi-pencil-fill"></i> Invia un nuovo feedback</a></li>
             </ul>
           </li>
         </ul>
-        <ul class="navbar-nav">
-          <a *ngIf="!isLoggedin()" class="nav-link " href="home/login" role="button" aria-expanded="false">
-              Login <i class="bi bi-box-arrow-in-right h5"></i>
-          </a>
-          <li  *ngIf="isLoggedin() && !isAdmin()" class="nav-item dropdown">
-            
+        <a class="navbar-brand mx-auto " href="home">
+          <img src="logo.png" alt="Logo" width="55" height="55" class="d-inline-block align-text-top p-1">
+        </a>
+        <ul class="navbar-nav ms-auto">
+          <li *ngIf="!isLoggedin()" class="nav-item">
+            <a class="nav-link" href="home/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+          </li>
+          <li *ngIf="isLoggedin() && !isAdmin()" class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle h5"></i> Profilo
+              <i class="bi bi-person-circle"></i> Profilo
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="home/user"> <i class="bi bi-person-lines-fill"></i> Il mio profilo</a></li>
-              <li><a class="dropdown-item" (click)="logout()">  <i class="bi bi-box-arrow-right"></i> Esci</a></li>
+              <li><a class="dropdown-item" href="home/user"><i class="bi bi-person-lines-fill"></i> Il mio profilo</a></li>
+              <li><a class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Esci</a></li>
             </ul>
           </li>
           <li *ngIf="isLoggedin() && isAdmin()" class="nav-item dropdown">
-            
-            <a  class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i> Profilo
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="home/admin"><i class="bi bi-clipboard-data"></i> Dashboard Admin</a></li>
-              <li><a class="dropdown-item" href="home/admin/userList"> <i class="bi bi-person-lines-fill"></i> Lista utenti</a></li>
-              <li><a class="dropdown-item" (click)="logout()"> <i class="bi bi-box-arrow-right"></i> Esci</a></li>
+              <li><a class="dropdown-item" href="home/admin/userList"><i class="bi bi-person-lines-fill"></i> Lista utenti</a></li>
+              <li><a class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Esci</a></li>
             </ul>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  
 </header>
