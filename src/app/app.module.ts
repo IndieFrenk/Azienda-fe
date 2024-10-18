@@ -43,6 +43,11 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { FooterComponent } from './footer/footer.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { DipendenteDetailComponent } from './dipendente/dipendente-detail/dipendente-detail.component';
+import { DipendenteListComponent } from './dipendente/dipendente-list/dipendente-list.component';
+import { UnitaOrganizzativaListComponent } from './unita-organizzativa/unita-organizzativa-list/unita-organizzativa-list.component';
+import { UnitaOrganizzativaDetailComponent } from './unita-organizzativa/unita-organizzativa-detail/unita-organizzativa-detail.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +65,11 @@ import { UserPageComponent } from './user-page/user-page.component';
     RecoverPassComponent,
     NotFoundPageComponent,
     FooterComponent,
-    UserPageComponent
+    UserPageComponent,
+    DipendenteListComponent,
+    DipendenteDetailComponent,
+    UnitaOrganizzativaListComponent,
+    UnitaOrganizzativaDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -34,7 +34,7 @@ export class HeaderComponent {
   public logout(){
     this.storageService.clean()
     localStorage.clear()
-    this.router.navigate(["home/login"])
+    this.router.navigate(["home"])
   }
 
 }

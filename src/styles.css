@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%;  margin: 0;  font-family: Roboto, "Helvetica Neue", sans-serif; background: #eeeeee;
+html, body { height: 100%;  margin: 0;  font-family: "Raleway", sans-serif; background: #eeeeee !important;
 }
 .container {
     margin: auto;
@@ -14,9 +14,7 @@ html, body { height: 100%;  margin: 0;  font-family: Roboto, "Helvetica Neue", s
     padding-top: 20px;
 }
 
-.cdk-overlay-container {
-    z-index: 10000;
-}
+
 .mat-mdc-card {
     box-shadow: 0px 0px 7px 1px #BDBDBD !important;
    
