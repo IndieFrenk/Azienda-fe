@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>Organigramma Aziendale</h2>
+  
+    <p-organizationChart [value]="data" selectionMode="single" class="organization-chart">
+      <ng-template let-node pTemplate="person">
+        <div class="node-header">{{ node.label }}</div>
+      </ng-template>
+  
+      <ng-template let-node pTemplate="role">
+        <div class="node-role">{{ node.label }}</div>
+      </ng-template>
+  
+      <ng-template let-node pTemplate="default">
+        <div class="node-unit">
+          <span>{{ node.label }}</span>
+        </div>
+      </ng-template>
+    </p-organizationChart>
+  </div>

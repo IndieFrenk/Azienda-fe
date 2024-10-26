@@ -15,6 +15,7 @@ import { AuthGuard } from './auth.guard';
 import { NotFoundError } from 'rxjs';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { OrganigrammaComponent } from './organigramma/organigramma.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
     {path: 'home/admin/userDetails',component:UserDetailsComponent, canActivate: [AuthGuard], data: { role: 'admin' }},
     {path: 'home/user/changePass', component:ChangePassComponent},
     {path: 'home/recoverPass', component:RecoverPassComponent},
+    {path: 'home/organigramma', component:OrganigrammaComponent},
     
     { path: '**', component: NotFoundPageComponent }
 ];

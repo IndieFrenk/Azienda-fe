@@ -47,7 +47,9 @@ import { DipendenteDetailComponent } from './dipendente/dipendente-detail/dipend
 import { DipendenteListComponent } from './dipendente/dipendente-list/dipendente-list.component';
 import { UnitaOrganizzativaListComponent } from './unita-organizzativa/unita-organizzativa-list/unita-organizzativa-list.component';
 import { UnitaOrganizzativaDetailComponent } from './unita-organizzativa/unita-organizzativa-detail/unita-organizzativa-detail.component';
-
+import { OrganigrammaComponent } from './organigramma/organigramma.component';
+import { TreeModule } from 'primeng/tree';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +71,8 @@ import { UnitaOrganizzativaDetailComponent } from './unita-organizzativa/unita-o
     DipendenteListComponent,
     DipendenteDetailComponent,
     UnitaOrganizzativaListComponent,
-    UnitaOrganizzativaDetailComponent
+    UnitaOrganizzativaDetailComponent,
+    OrganigrammaComponent
   ],
   imports: [
     BrowserModule,
@@ -94,6 +97,8 @@ import { UnitaOrganizzativaDetailComponent } from './unita-organizzativa/unita-o
     MatSortModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    TreeModule,
+    OrganizationChartModule
   ],
   providers: [
     DatePipe,
