@@ -5,6 +5,9 @@ import { UnitaOrganizzativa } from '../_models/unitaOrganizzativa.model';
 import { Ruolo } from '../_models/ruolo.model';
 import { TreeNode } from 'primeng/api';
 import { forkJoin } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { AggiungiUnitaComponent } from '../aggiungi-unita/aggiungi-unita.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organigramma',
@@ -16,12 +19,20 @@ export class OrganigrammaComponent implements OnInit {
   ruoli: Ruolo[] = [];
   unitaOrganizzative: UnitaOrganizzativa[] = [];
   unitaOrganizzativeComplete: UnitaOrganizzativa[] = [];
-  data: TreeNode[] = [];
+  nodi: TreeNode[] = [];
   unita: UnitaOrganizzativa | null = null;
-
+  addUnita: UnitaOrganizzativa ={
+    id: 0,
+    nome: '',
+    ruoli: [],
+    dipendenti: [],
+    unitaSuperiore: 0,
+    unitaSottostanti: []
+  };
   constructor(
     private organigrammaService: OrganigrammaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,24 +56,18 @@ export class OrganigrammaComponent implements OnInit {
   loadOrganigramma(): void {
     this.organigrammaService.getUnitaOrganizzative().subscribe(
       (unitaList) => {
-        const detailRequests = unitaList.map(unita => 
-          this.organigrammaService.getUnitaById(unita.id)
-        );
-
+        const detailRequests = unitaList.map(unita => this.organigrammaService.getUnitaById(unita.id));
         forkJoin(detailRequests).subscribe(
           (detailedUnits) => {
             this.unitaOrganizzativeComplete = detailedUnits;
-            this.data = this.formatOrganizationalData(this.unitaOrganizzativeComplete);
-            console.log('Formatted organizational data:', this.data);
+            this.unitaOrganizzative = this.unitaOrganizzativeComplete;
+            this.nodi = this.formatOrganizationalData(this.unitaOrganizzativeComplete);
+            console.log('Formatted organizational data:', this.nodi);
           },
-          (err) => {
-            console.error('Error loading detailed unit information:', err);
-          }
+          (err) => console.error('Error loading detailed unit information:', err)
         );
       },
-      (err) => {
-        console.error('Error loading organizational units:', err);
-      }
+      (err) => console.error('Error loading organizational units:', err)
     );
   }
 
@@ -128,6 +133,7 @@ export class OrganigrammaComponent implements OnInit {
       }
     );
   }
+  
 
   // Update an organizational unit
   updateUnitaOrganizzativa(id: number, updatedUnita: UnitaOrganizzativa): void {
@@ -209,30 +215,9 @@ export class OrganigrammaComponent implements OnInit {
     );
   }
 
-  // Create a new role
-  createRuolo(newRuolo: Ruolo): void {
-    this.organigrammaService.createRuolo(newRuolo).subscribe(
-      (resp) => {
-        this.ruoli.push(resp);
-        console.log('Role created:', resp);
-      },
-      (err) => {
-        console.error('Error creating role:', err);
-      }
-    );
-  }
 
-  // Get a specific role by ID
-  getRuoloById(id: number): void {
-    this.organigrammaService.getRuoloById(id).subscribe(
-      (resp) => {
-        console.log(`Role ID ${id} loaded:`, resp);
-      },
-      (err) => {
-        console.error(`Error loading role ID ${id}:`, err);
-      }
-    );
-  }
+
+
 
   // Update a role by ID
  /* updateRuolo(id: number, updatedRuolo: Ruolo): void {
@@ -248,15 +233,36 @@ export class OrganigrammaComponent implements OnInit {
     );
   }*/
 
-  // Delete a role by ID
-  deleteRuolo(id: number): void {
-    this.organigrammaService.deleteRuolo(id).subscribe(
-      () => {
-        this.ruoli = this.ruoli.filter((r) => r.id !== id);
-        console.log(`Role ID ${id} deleted.`);
+
+
+  openDialog(): void {
+    if (this.unitaOrganizzative && this.unitaOrganizzative.length > 0) {
+      const dialogRef = this.dialog.open(AggiungiUnitaComponent, {
+        width: '400px',
+        data: { unitaOptions: this.unitaOrganizzative }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.addUnitaOrganizzativa(result);
+        }
+      });
+    } else {
+      console.error("unitaOrganizzative non è stato caricato correttamente.");
+    }
+  }
+  goToUnitaDettaglio(id: number): void {
+    this.router.navigate(['/unita', id]);
+  }
+  addUnitaOrganizzativa(unita: UnitaOrganizzativa): void {
+    console.log('Aggiunta unità organizzativa:', unita);
+    this.organigrammaService.createUnita(unita).subscribe(
+      (resp) => {
+        console.log('Unità organizzativa aggiunta:', resp);
+        this.loadOrganigramma(); // Ricarica i dati per aggiornare l'organigramma
       },
       (err) => {
-        console.error(`Error deleting role ID ${id}:`, err);
+        console.error('Errore durante l\'aggiunta dell\'unità organizzativa:', err);
       }
     );
   }

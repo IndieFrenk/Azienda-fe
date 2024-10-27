@@ -1,20 +1,14 @@
 <div class="container">
   <h2>Organigramma Aziendale</h2>
+  <button mat-button color="primary" (click)="openDialog()">Aggiungi Unità Organizzativa</button>
 
-  <div *ngFor="let rootNode of data">
-    <p-organizationChart [value]="[rootNode]" selectionMode="single" class="organization-chart">
-      <ng-template let-node pTemplate="unit">
-        <div class="node-header">{{ node.label }}</div>
-        <div class="node-content">{{ node.data.descrizione }}</div>
-      </ng-template>
-
-      <ng-template let-node pTemplate="person">
-        <div class="node-header">{{ node.label }}</div>
-      </ng-template>
-
-      <ng-template let-node pTemplate="role">
-        <div class="node-role">{{ node.label }}</div>
-      </ng-template>
+  <div *ngFor="let rootNode of nodi">
+    <p-organizationChart 
+      [value]="[rootNode]" 
+      selectionMode="single" 
+      class="organization-chart" 
+      (onNodeSelect)="goToUnitaDettaglio($event.node.data.id)">
+      <!-- Template code here -->
     </p-organizationChart>
   </div>
 </div>

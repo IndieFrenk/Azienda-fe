@@ -16,6 +16,7 @@ import { NotFoundError } from 'rxjs';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { OrganigrammaComponent } from './organigramma/organigramma.component';
+import { UnitaDettaglioComponent } from './unita-dettaglio/unita-dettaglio.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
     {path: 'home/user/changePass', component:ChangePassComponent},
     {path: 'home/recoverPass', component:RecoverPassComponent},
     {path: 'home/organigramma', component:OrganigrammaComponent},
+    { path: 'unita/:id', component: UnitaDettaglioComponent },
     
     { path: '**', component: NotFoundPageComponent }
 ];

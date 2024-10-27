@@ -1,0 +1,27 @@
+<h2>Aggiungi Unità Organizzativa</h2>
+<form #unitaForm="ngForm" (ngSubmit)="onSubmit(unitaForm)">
+  <mat-form-field appearance="outline" >
+    <mat-label>Nome</mat-label>
+    <input matInput name="nome" [(ngModel)]="unita.nome" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Unità Superiore</mat-label>
+    <mat-select
+      [(ngModel)]="unita.unitaSuperiore"
+      name="unitaSuperiore"
+      required
+      #unitaSuperioreControl="ngModel"
+    >
+      <mat-option *ngFor="let unita of unitaOptions" [value]="unita.id">
+        {{ unita.nome }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="unitaSuperioreControl.invalid && unitaSuperioreControl.touched">
+      Seleziona un'unità superiore
+    </mat-error>
+  </mat-form-field>
+  
+
+  <button mat-button type="submit" [disabled]="unitaForm.invalid">Aggiungi</button>
+</form>

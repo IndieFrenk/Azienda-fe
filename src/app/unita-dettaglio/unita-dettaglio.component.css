@@ -1,0 +1,128 @@
+/* Container principale */
+.unit-details-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Stili per i titoli */
+  h1 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.8em;
+    margin-bottom: 30px;
+  }
+  
+  h2 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.2em;
+    margin: 30px 0;
+  }
+  
+  h3 {
+    color: #2980b9;
+    font-size: 1.5em;
+    margin: 25px 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ecf0f1;
+  }
+  
+  /* Sezioni dei ruoli */
+  .role-section {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .role-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+  
+  /* Form controls */
+  .form-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  select, input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid #bdc3c7;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+  }
+  
+  select:focus, input:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 5px rgba(41,128,185,0.2);
+  }
+  
+  button {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background: #3498db;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Loading state */
+  .loading-message {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 1.2em;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  /* Responsive design */
+  @media screen and (max-width: 768px) {
+    .unit-details-container {
+      padding: 10px;
+    }
+  
+    h1 {
+      font-size: 2.2em;
+    }
+  
+    h2 {
+      font-size: 1.8em;
+    }
+  
+    h3 {
+      font-size: 1.3em;
+    }
+  
+    .form-section {
+      padding: 15px;
+    }
+  
+    button {
+      width: 100%;
+      padding: 10px;
+    }
+  }
