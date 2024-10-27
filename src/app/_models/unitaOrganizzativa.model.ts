@@ -3,4 +3,6 @@ export interface UnitaOrganizzativa {
     nome: string ;
     ruoli: string[];
     dipendenti: string[];
+    unitaSuperiore: number;
+    unitaSottostanti: number[]
 }

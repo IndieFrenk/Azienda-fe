@@ -1,0 +1,131 @@
+/* Stili container principale */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  font-size: 2.5em;
+}
+
+/* Stili per l'organigramma */
+:host ::ng-deep .organization-chart {
+  padding: 30px 0;
+}
+
+/* Stili per i nodi */
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content {
+  background: #ffffff;
+  border: 2px solid #2980b9;
+  border-radius: 8px;
+  padding: 1em;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+/* Stili per l'header del nodo */
+.node-header {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 1.1em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+}
+
+/* Stili per il contenuto del nodo */
+.node-content {
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* Stili per il ruolo */
+.node-role {
+  color: #7f8c8d;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* Stili migliorati per le linee di connessione */
+:host ::ng-deep .p-organizationchart .p-organizationchart-line-down {
+  background: #2980b9 !important;
+  width: 2px !important;
+  height: 20px !important;
+}
+
+:host ::ng-deep .p-organizationchart .p-organizationchart-line-left {
+  border-right: 2px solid #2980b9 !important;
+  border-top: 2px solid #2980b9 !important;
+}
+
+:host ::ng-deep .p-organizationchart .p-organizationchart-line-right {
+  border-left: 2px solid #2980b9 !important;
+  border-top: 2px solid #2980b9 !important;
+}
+
+/* Assicurati che le linee orizzontali siano visibili */
+:host ::ng-deep .p-organizationchart-table {
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+:host ::ng-deep .p-organizationchart-nodes {
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+:host ::ng-deep .p-organizationchart-lines {
+  height: 20px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  :host ::ng-deep .p-organizationchart .p-organizationchart-node-content {
+    padding: 0.8em;
+  }
+  
+  .node-header {
+    font-size: 1em;
+  }
+  
+  .node-content,
+  .node-role {
+    font-size: 0.8em;
+  }
+}
+
+/* Animazioni per i nodi selezionati */
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content.p-highlight {
+  background: #3498db;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content.p-highlight .node-header,
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content.p-highlight .node-content,
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content.p-highlight .node-role {
+  color: #ffffff;
+}

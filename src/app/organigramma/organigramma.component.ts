@@ -4,6 +4,7 @@ import { OrganigrammaService } from '../_services/organigramma.service';
 import { UnitaOrganizzativa } from '../_models/unitaOrganizzativa.model';
 import { Ruolo } from '../_models/ruolo.model';
 import { TreeNode } from 'primeng/api';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-organigramma',
@@ -14,6 +15,7 @@ export class OrganigrammaComponent implements OnInit {
   dipendenti: any[] = [];
   ruoli: Ruolo[] = [];
   unitaOrganizzative: UnitaOrganizzativa[] = [];
+  unitaOrganizzativeComplete: UnitaOrganizzativa[] = [];
   data: TreeNode[] = [];
   unita: UnitaOrganizzativa | null = null;
 
@@ -40,12 +42,23 @@ export class OrganigrammaComponent implements OnInit {
     );
   }
 
-  // Load organizational chart data
   loadOrganigramma(): void {
     this.organigrammaService.getUnitaOrganizzative().subscribe(
-      (unitaOrganizzative) => {
-        this.unitaOrganizzative = unitaOrganizzative;
-        this.data = this.formatOrganizationalData(unitaOrganizzative);
+      (unitaList) => {
+        const detailRequests = unitaList.map(unita => 
+          this.organigrammaService.getUnitaById(unita.id)
+        );
+
+        forkJoin(detailRequests).subscribe(
+          (detailedUnits) => {
+            this.unitaOrganizzativeComplete = detailedUnits;
+            this.data = this.formatOrganizationalData(this.unitaOrganizzativeComplete);
+            console.log('Formatted organizational data:', this.data);
+          },
+          (err) => {
+            console.error('Error loading detailed unit information:', err);
+          }
+        );
       },
       (err) => {
         console.error('Error loading organizational units:', err);
@@ -53,31 +66,62 @@ export class OrganigrammaComponent implements OnInit {
     );
   }
 
-  // Format organizational data for PrimeNG's TreeNode structure
+  getUnitaSuperiorId(unit: UnitaOrganizzativa): number | null {
+    if (typeof unit.unitaSuperiore === 'number') {
+      return unit.unitaSuperiore;
+    }
+    if (unit.unitaSuperiore && typeof unit.unitaSuperiore === 'object' && 'id' in unit.unitaSuperiore) {
+      return (unit.unitaSuperiore as { id: number }).id;
+    }
+    return null;
+  }
+
   formatOrganizationalData(units: UnitaOrganizzativa[]): TreeNode[] {
-    return units.map((unit) => ({
-      label: unit.nome,
-      expanded: true,
-      children: unit.dipendenti?.map((dipendente:any) => ({
-        label: dipendente.nome,
-        type: 'person',
-        styleClass: 'p-person',
+    const unitsMap = new Map<number, TreeNode>();
+  
+    // Create nodes for all units first
+    units.forEach(unit => {
+      const node: TreeNode = {
+        label: unit.nome,
+        type: 'unit',
         expanded: true,
-        children: dipendente.ruoli?.map((ruolo:any) => ({
-          label: ruolo.nome,
-          type: 'role',
-          styleClass: 'p-role'
-        }))
-      }))
-    }));
+        data: {
+          id: unit.id,
+          nome: unit.nome,
+          unitaSuperiore: this.getUnitaSuperiorId(unit)
+        },
+        children: []
+      };
+      unitsMap.set(unit.id, node);
+    });
+  
+    // Process parent-child relationships
+    const rootNodes: TreeNode[] = [];
+    units.forEach(unit => {
+      const node = unitsMap.get(unit.id);
+      if (node) {
+        const parentId = this.getUnitaSuperiorId(unit);
+        if (parentId !== null) {
+          const parentNode = unitsMap.get(parentId);
+          if (parentNode && parentNode.children) {
+            parentNode.children.push(node);
+          }
+        } else {
+          rootNodes.push(node);
+        }
+      }
+    });
+  
+    return rootNodes;
   }
 
   // Retrieve organizational unit by ID
-  getUnitaById(id: number): void {
+  getUnitaById(id: number) {
     this.organigrammaService.getUnitaById(id).subscribe(
       (resp) => {
         this.unita = resp;
         console.log('Loaded unit:', resp);
+        
       },
       (err) => {
         console.error(`Error loading unit with ID ${id}:`, err);
