@@ -116,8 +116,8 @@ export class OrganigrammaService {
       })
     );
   }
-  rimuoviDipendente(unitaId: number, dipendenteId: number): Observable<UnitaOrganizzativa> {
-    return this.http.delete<UnitaOrganizzativa>(`${this.apiUrl}/dipendenti/${unitaId}/${dipendenteId}`);
+  rimuoviDipendente(unitaId: number, dipendenteId: number) {
+    return this.http.delete(`${this.apiUrl}/dipendenti/${unitaId}/${dipendenteId}`);
   }
 
   trasferisciDipendente(dipendenteId: number, unitaDaId: number, unitaAId: number): Observable<void> {

@@ -6,6 +6,7 @@ import { Ruolo } from '../_models/ruolo.model';
 import { Dipendente } from '../_models/dipendente.model';
 import { forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-unita-dettaglio',
@@ -16,34 +17,73 @@ export class UnitaDettaglioComponent implements OnInit {
   ruoliKeys: string[] = [];
   unita: UnitaOrganizzativa | null = null;
   ruoli: Ruolo[] = [];
+  ruoliAssegnati: Ruolo[] = [];
   availableRuoli: Ruolo[] = [];
-  listaDipendenti: Dipendente[][] = [];
+  listaDipendenti: { [key: number]: Dipendente[] } = {};
   dipendentiUnita: Dipendente[] = [];
   selectedRuoloId: number | null = null;
   newRoleName: string = '';
-  filteredDipendenti: { [key: number]: Dipendente[] } = {};
+  filteredDipendenti: Dipendente[] = [];
   ruoliConDipendenti: { [ruolo: string]: Dipendente[] } = {};
   selectedRuoliForNewDipendente: number[] = [];
+  selectedRuoloIdForDipendente: number | null = null;
   newDipendente: Dipendente = {
     id: 0,
     nome: '',
     ruoli: [],
     unita: 0,
   };
+  displayedColumnsDipendenti: string[] = ['Nome', 'Azioni'];
+  selectedRuoloIdForNewDipendente: number | null = null;
+  selectedDipendenteId: number | null = null;
+  unitaT: any; // Dati dell'unità
+  ruoliT: any[] | undefined; // Lista dei ruoli
+  dipendentiUnitaT: any[] | undefined; // Lista dei dipendenti
+  displayedColumns: string[] = ['ruolo', 'dipendente'];
   id = 0
   constructor(
     private route: ActivatedRoute,
     private organigrammaService: OrganigrammaService
   ) {}
-
+  ruoliConDipendentiT = new MatTableDataSource();
+  listaDipendentiT: { [key: number]: Dipendente[] } = {};
   ngOnInit(): void {
+    
     this.route.paramMap.subscribe(params => {
       this.id = Number(params.get('id'));
       this.loadUnita(this.id);
       this.loadAvailableRoles();
+      this.getDipendenti();
     });
   }
-
+  ngAfterViewInit(): void {
+    this.ruoliConDipendentiT.data = this.ruoli.map(ruolo => {
+      // Usa un array vuoto se `this.listaDipendenti[ruolo.id]` è undefined
+      const dipendenti = this.listaDipendenti[ruolo.id] ?? []; 
+      return { ruolo: ruolo.nome, dipendenti: dipendenti };
+    });
+    console.log('Ruoli con dipendenti:', this.ruoliConDipendentiT.data);
+  }
+  deleteDipendente(dipendenteId: number): void {
+    console.log(dipendenteId)
+    console.log(this.id)
+    this.organigrammaService.rimuoviDipendente(this.id, dipendenteId)
+      .subscribe(
+        () => {
+          this.loadDipendentiUnita(this.unita!.id);
+        },
+        (err) => {
+          console.error('Errore nella rimozione del dipendente:', err);
+        }
+      );
+  }
+  getDipendenti() {
+    this.organigrammaService.getDipendentiNonAssegnatiAUnita(this.id).subscribe(
+      (dipendenti) => {
+        this.filteredDipendenti = dipendenti;
+      },
+      (err) => console.error('Errore nel caricamento dei dipendenti:', err));
+  }
   loadUnita(id: number): void {
     this.organigrammaService.getUnitaById(id).subscribe(
       (unita) => {
@@ -54,20 +94,30 @@ export class UnitaDettaglioComponent implements OnInit {
       (err) => {
         console.error('Errore nel caricamento dell\'unità:', err);
       }
-    );
+    ); //sistemare tabella con ruoli e dipendenti
   }
   loadDipendentiUnita(unitaId: number): void {
-    for (let i = 0; i < this.ruoli.length; i++) {
-      this.organigrammaService.getRuoliDipendenteUnita(unitaId, this.ruoli[i].id).subscribe(
-        (dipendenti) => {
-          this.dipendentiUnita = dipendenti;
-          this.listaDipendenti[i] = dipendenti;
-          this.ruoliConDipendenti[this.ruoli[i].nome] = dipendenti;
-          console.log('Dipendenti caricati:', this.listaDipendenti);
-        },
-        (err) => console.error('Errore nel caricamento dei dipendenti:', err)
-      );
-    }
+    const ruoliDipendentiPromises = this.ruoli.map(ruolo => {
+      return this.organigrammaService.getRuoliDipendenteUnita(unitaId, ruolo.id).toPromise()
+        .then(dipendenti => {
+          if (dipendenti){
+            this.dipendentiUnita = dipendenti;
+          // Mappa i dipendenti per ruolo
+          this.listaDipendenti[ruolo.id] = dipendenti;
+          }
+          return { ruolo: ruolo.nome, dipendenti: dipendenti };
+        })
+        .catch(err => {
+          console.error('Errore nel caricamento dei dipendenti:', err);
+          return { ruolo: ruolo.nome, dipendenti: [] };
+        });
+      });
+
+      // Una volta completate tutte le promesse, aggiorna `ruoliConDipendentiT`
+      Promise.all(ruoliDipendentiPromises).then((ruoliConDipendenti) => {
+        this.ruoliConDipendentiT.data = ruoliConDipendenti;
+        console.log('Ruoli con dipendenti aggiornati:', this.ruoliConDipendentiT.data);
+      });
   }
   
   loadRuoliUnita(unitaId: number): void {
@@ -82,7 +132,8 @@ export class UnitaDettaglioComponent implements OnInit {
         return ruolo;
       }))
     ).subscribe(
-      (ruoli) => this.ruoli = ruoli,
+      (ruoli) => { this.ruoli = ruoli;
+        this.ruoliAssegnati = ruoli},
       (err) => console.error('Errore nel caricamento dei ruoli:', err)
     );
   }
@@ -200,4 +251,63 @@ export class UnitaDettaglioComponent implements OnInit {
   isRuoloSelectedForNew(ruoloId: number): boolean {
     return this.selectedRuoliForNewDipendente.includes(ruoloId);
   }
+
+  assegnaDipendenteARuolo(): void {
+    if (this.selectedDipendenteId && this.selectedRuoloIdForDipendente) {
+      this.organigrammaService.assegnaRuoloADipendente(
+        this.selectedRuoloIdForDipendente,
+        this.selectedDipendenteId
+      ).subscribe(
+        () => {
+          this.loadDipendentiUnita(this.unita!.id);
+          this.selectedDipendenteId = null;
+          this.selectedRuoloIdForDipendente = null;
+        },
+        (err) => console.error('Errore nell\'assegnazione del dipendente al ruolo:', err)
+      );
+    }
+  }
+
+  // Metodo per creare e assegnare un nuovo dipendente a un ruolo
+  creaDipendenteEAssegnaRuolo(): void {
+  if (this.newDipendente.nome && this.selectedRuoloIdForNewDipendente && this.unita) {
+    // Crea un nuovo dipendente e assegnagli un ruolo
+    const requestPayload = {
+      nome: this.newDipendente.nome,
+      unita: this.unita.id,
+      ruoli: [this.selectedRuoloIdForNewDipendente]
+    };
+
+    this.organigrammaService.creaDipendenteConRuoliEUnita(requestPayload)
+      .subscribe(
+        () => {
+          this.loadDipendentiUnita(this.unita!.id);
+          this.newDipendente = { id: 0, nome: '', ruoli: [], unita: 0 };
+          this.selectedRuoloIdForNewDipendente = null;
+        },
+        (error) => {
+          console.error('Errore nella creazione e assegnazione del nuovo dipendente:', error);
+        }
+      );
+  } else if (this.selectedDipendenteId && this.selectedRuoloIdForDipendente) {
+    // Assegna un ruolo a un dipendente esistente
+    const requestPayload = {
+      id: this.selectedDipendenteId,
+      nome: this.newDipendente.nome,
+      unita: this.id,
+      ruoli: [this.selectedRuoloIdForDipendente]
+    };
+    this.organigrammaService.creaDipendenteConRuoliEUnita(requestPayload)
+      .subscribe(
+        () => {
+          this.loadDipendentiUnita(this.unita!.id);
+          this.newDipendente = { id: 0, nome: '', ruoli: [], unita: 0 };
+          this.selectedRuoloIdForNewDipendente = null;
+        },
+        (error) => {
+          console.error('Errore nella creazione e assegnazione del nuovo dipendente:', error);
+        }
+      );
+  }
+}
 }

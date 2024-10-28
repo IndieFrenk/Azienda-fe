@@ -8,6 +8,7 @@ import { forkJoin } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { AggiungiUnitaComponent } from '../aggiungi-unita/aggiungi-unita.component';
 import { Router } from '@angular/router';
+import { Dipendente } from '../_models/dipendente.model';
 
 @Component({
   selector: 'app-organigramma',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./organigramma.component.css']
 })
 export class OrganigrammaComponent implements OnInit {
-  dipendenti: any[] = [];
+  dipendenti: Dipendente[] = [];
   ruoli: Ruolo[] = [];
   unitaOrganizzative: UnitaOrganizzativa[] = [];
   unitaOrganizzativeComplete: UnitaOrganizzativa[] = [];
@@ -29,6 +30,9 @@ export class OrganigrammaComponent implements OnInit {
     unitaSuperiore: 0,
     unitaSottostanti: []
   };
+  displayedColumnsDipendenti: string[] = ['Nome', 'Azioni'];
+  displayedColumnsRuoli: string[] = ['Nome', 'Azioni'];
+  delUnita : UnitaOrganizzativa | null = null;
   constructor(
     private organigrammaService: OrganigrammaService,
     private dialog: MatDialog,
@@ -38,6 +42,7 @@ export class OrganigrammaComponent implements OnInit {
   ngOnInit(): void {
     this.loadRuoli();
     this.loadOrganigramma();
+    this.getDipendenti();
   }
 
   // Load all roles
@@ -119,7 +124,15 @@ export class OrganigrammaComponent implements OnInit {
   
     return rootNodes;
   }
+  deleteDipendente(dipendenteId: number): void {
+    console.log(`Deleting employee with ID ${dipendenteId}`);
+    // Implement delete functionality here, if required
+  }
 
+  deleteRuolo(ruoloId: number): void {
+    console.log(`Deleting role with ID ${ruoloId}`);
+    // Implement delete functionality here, if required
+  }
   // Retrieve organizational unit by ID
   getUnitaById(id: number) {
     this.organigrammaService.getUnitaById(id).subscribe(
@@ -133,24 +146,34 @@ export class OrganigrammaComponent implements OnInit {
       }
     );
   }
-  
-
-  // Update an organizational unit
-  updateUnitaOrganizzativa(id: number, updatedUnita: UnitaOrganizzativa): void {
-    this.organigrammaService.updateUnita(id, updatedUnita).subscribe(
+  getRuoli() {
+    this.organigrammaService.getAllRuoli().subscribe(
       (resp) => {
-        const index = this.unitaOrganizzative.findIndex((u) => u.id === id);
-        if (index !== -1) this.unitaOrganizzative[index] = resp;
-        console.log('Updated unit:', resp);
+        this.ruoli = resp;
+        console.log('Loaded roles:', resp);
       },
       (err) => {
-        console.error(`Error updating unit with ID ${id}:`, err);
-      }
-    );
+        console.error('Error loading roles:', err);
+      });
   }
+  getDipendenti() {
+    this.organigrammaService.getAllDipendenti().subscribe(
+      (resp) => {
+        this.dipendenti = resp;
+        console.log('Loaded employees:', resp);
+      },
+      (err) => {
+        console.error('Error loading employees:', err);
+      });
+  }
+
+
 
   // Delete an organizational unit
   deleteUnitaOrganizzativa(id: number): void {
+    this.getUnitaById(id);
+    this.delUnita = this.unita
+    if (this.delUnita?.unitaSottostanti.length === 0) {
     this.organigrammaService.deleteUnita(id).subscribe(
       () => {
         this.unitaOrganizzative = this.unitaOrganizzative.filter((u) => u.id !== id);
@@ -161,59 +184,15 @@ export class OrganigrammaComponent implements OnInit {
       }
     );
   }
-
-  // Load all employees in a specific unit
-  loadDipendentiUnita(unitaId: number): void {
-    this.organigrammaService.getDipendentiUnita(unitaId).subscribe(
-      (resp) => {
-        this.dipendenti = resp;
-        console.log(`Loaded employees for unit ID ${unitaId}:`, resp);
-      },
-      (err) => {
-        console.error(`Error loading employees for unit ID ${unitaId}:`, err);
-      }
-    );
   }
 
-  // Add an employee to a unit
-  aggiungiDipendente(unitaId: number, dipendenteId: number): void {
-    this.organigrammaService.aggiungiDipendente(unitaId, dipendenteId).subscribe(
-      (resp) => {
-        console.log(`Employee ID ${dipendenteId} added to unit ID ${unitaId}`);
-        this.loadDipendentiUnita(unitaId); // Refresh the employee list for the unit
-      },
-      (err) => {
-        console.error(`Error adding employee ID ${dipendenteId} to unit ID ${unitaId}:`, err);
-      }
-    );
-  }
 
-  // Remove an employee from a unit
-  rimuoviDipendente(unitaId: number, dipendenteId: number): void {
-    this.organigrammaService.rimuoviDipendente(unitaId, dipendenteId).subscribe(
-      (resp) => {
-        console.log(`Employee ID ${dipendenteId} removed from unit ID ${unitaId}`);
-        this.loadDipendentiUnita(unitaId); // Refresh the employee list for the unit
-      },
-      (err) => {
-        console.error(`Error removing employee ID ${dipendenteId} from unit ID ${unitaId}:`, err);
-      }
-    );
-  }
 
-  // Transfer an employee between units
-  trasferisciDipendente(dipendenteId: number, unitaDaId: number, unitaAId: number): void {
-    this.organigrammaService.trasferisciDipendente(dipendenteId, unitaDaId, unitaAId).subscribe(
-      () => {
-        console.log(`Employee ID ${dipendenteId} transferred from unit ID ${unitaDaId} to unit ID ${unitaAId}`);
-        this.loadDipendentiUnita(unitaDaId); // Refresh both units
-        this.loadDipendentiUnita(unitaAId);
-      },
-      (err) => {
-        console.error(`Error transferring employee ID ${dipendenteId} from unit ID ${unitaDaId} to unit ID ${unitaAId}:`, err);
-      }
-    );
-  }
+
+
+
+
+ 
 
 
 
@@ -236,7 +215,7 @@ export class OrganigrammaComponent implements OnInit {
 
 
   openDialog(): void {
-    if (this.unitaOrganizzative && this.unitaOrganizzative.length > 0) {
+    if (this.unitaOrganizzative) {
       const dialogRef = this.dialog.open(AggiungiUnitaComponent, {
         width: '400px',
         data: { unitaOptions: this.unitaOrganizzative }
@@ -266,4 +245,5 @@ export class OrganigrammaComponent implements OnInit {
       }
     );
   }
+  
 }

@@ -8,7 +8,40 @@
       selectionMode="single" 
       class="organization-chart" 
       (onNodeSelect)="goToUnitaDettaglio($event.node.data.id)">
-      <!-- Template code here -->
+     
     </p-organizationChart>
+  </div>
+</div>
+
+
+<!-- Roles Table -->
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5>Lista Ruoli</h5>
+    </div>
+    <div class="card-body">
+      <table mat-table [dataSource]="ruoli" class="mat-elevation-z8 w-100" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="Nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+          <td mat-cell *matCellDef="let ruolo">{{ ruolo.nome }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="Azioni">
+          <th mat-header-cell *matHeaderCellDef>Azioni</th>
+          <td mat-cell *matCellDef="let ruolo">
+            <button mat-icon-button color="primary" (click)="deleteRuolo(ruolo.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsRuoli"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsRuoli;"></tr>
+      </table>
+    </div>
   </div>
 </div>

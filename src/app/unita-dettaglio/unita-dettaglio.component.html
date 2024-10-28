@@ -1,31 +1,77 @@
 <div class="unit-details-container" *ngIf="unita">
     <h1>{{ unita.nome }}</h1>
-    <h2>Ruoli e Dipendenti</h2>
-    <div *ngFor="let ruolo of ruoli">
-        <h3>{{ ruolo.nome }}</h3>
-        <ul>
-          <li *ngFor="let dipendente of filteredDipendenti[ruolo.id]">
+  <h2>Ruoli e Dipendenti</h2>
+
+  <!-- Angular Material Table for Roles and Employees -->
+  <table mat-table [dataSource]="ruoliConDipendentiT" class="mat-elevation-z8">
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="ruolo">
+      <th mat-header-cell *matHeaderCellDef> Ruolo </th>
+      <td mat-cell *matCellDef="let element"> {{ element.ruolo }} </td>
+    </ng-container>
+
+    <!-- Employee Column -->
+    <ng-container matColumnDef="dipendente">
+      <th mat-header-cell *matHeaderCellDef> Dipendenti </th>
+      <td mat-cell *matCellDef="let element">
+        <ul *ngIf="element.dipendenti.length > 0">
+          <li *ngFor="let dipendente of element.dipendenti">
             {{ dipendente.nome }}
           </li>
         </ul>
+        <span *ngIf="element.dipendenti.length === 0">Nessun dipendente</span>
+      </td>
+    </ng-container>
+
+    <!-- Header and Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h5>Lista Dipendenti</h5>
       </div>
-    <!-- Displaying Roles and Associated Employees -->
-    <div class="role-section" *ngFor="let ruolo of ruoli">
-      <h3>
-        {{ ruolo.nome }}
-        <button (click)="deleteRole(ruolo.id)" mat-icon-button color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </h3>
-      <ul>
-        <li *ngFor="let dipendente of dipendentiUnita">
-          <span *ngIf="hasDipendenteRuolo(dipendente, ruolo.id)">
-            {{ dipendente.nome }}
-            
-          </span>
-        </li>
-      </ul>
+      <div class="card-body">
+        <table mat-table [dataSource]="dipendentiUnita" class="mat-elevation-z8 w-100" matSort>
+          <!-- Name Column -->
+          <ng-container matColumnDef="Nome">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+            <td mat-cell *matCellDef="let dipendente">{{ dipendente.nome }}</td>
+          </ng-container>
+  
+          <!-- Actions Column -->
+          <ng-container matColumnDef="Azioni">
+            <th mat-header-cell *matHeaderCellDef>Azioni</th>
+            <td mat-cell *matCellDef="let dipendente">
+              <button mat-icon-button color="warn" (click)="deleteDipendente(dipendente.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <!-- Header and Row Definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsDipendenti"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsDipendenti;"></tr>
+        </table>
+      </div>
     </div>
+  </div>
+    <!-- Form per Assegnare e Aggiungere Dipendenti e Ruoli Rimane Invariato -->
+    <div class="form-section">
+        <h3>Assegna un Ruolo</h3>
+        <select [(ngModel)]="selectedRuoloId">
+            <option [ngValue]="null">Seleziona un ruolo</option>
+            <option *ngFor="let ruolo of availableRuoli" [ngValue]="ruolo.id">
+                {{ ruolo.nome }}
+            </option>
+        </select>
+        <button [disabled]="!selectedRuoloId" (click)="assignRoleToUnit()">
+            Assegna Ruolo
+        </button>
+    </div>
+    
     <div *ngFor="let ruolo of ruoliKeys">
         <h3>{{ ruolo }}</h3>
         <ul>
@@ -35,19 +81,7 @@
         </ul>
       </div>
   
-    <!-- Form to Assign an Existing Role -->
-    <div class="form-section">
-      <h3>Assegna un Ruolo</h3>
-      <select [(ngModel)]="selectedRuoloId">
-        <option [ngValue]="null">Seleziona un ruolo</option>
-        <option *ngFor="let ruolo of availableRuoli" [ngValue]="ruolo.id">
-          {{ ruolo.nome }}
-        </option>
-      </select>
-      <button [disabled]="!selectedRuoloId" (click)="assignRoleToUnit()">
-        Assegna Ruolo
-      </button>
-    </div>
+    
   
     <!-- Form to Create and Assign a New Role -->
     <div class="form-section">
@@ -60,38 +94,53 @@
         Crea e Assegna
       </button>
     </div>
-  
     <div class="form-section">
-        <h3>Aggiungi Dipendente</h3>
-        <div class="form-group">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Nome Dipendente</mat-label>
-            <input matInput
-                   placeholder="Inserisci il nome" 
-                   [(ngModel)]="newDipendente.nome" />
-          </mat-form-field>
-        </div>
-        
-        <div class="form-group">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Seleziona Ruoli</mat-label>
-            <mat-select [(ngModel)]="selectedRuoliForNewDipendente" multiple>
-              <mat-option *ngFor="let ruolo of availableRuoli" [value]="ruolo.id">
-                {{ruolo.nome}}
+      <h3>Assegna Dipendente a Ruolo</h3>
+      <!-- Opzione per scegliere un dipendente esistente -->
+      <mat-form-field appearance="fill">
+          <mat-label>Seleziona Dipendente</mat-label>
+          <mat-select [(ngModel)]="selectedDipendenteId">
+              <mat-option >Seleziona un dipendente</mat-option>
+              <mat-option *ngFor="let dipendente of filteredDipendenti" [value]="dipendente.id">
+                  {{ dipendente.nome }}
               </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          </mat-select>
+      </mat-form-field>
+  
+      <!-- Sezione per assegnare un ruolo al dipendente selezionato -->
+      <mat-form-field appearance="fill">
+          <mat-label>Seleziona Ruolo</mat-label>
+          <mat-select [(ngModel)]="selectedRuoloIdForDipendente">
+              <mat-option >Seleziona un ruolo</mat-option>
+              <mat-option *ngFor="let ruolo of ruoliAssegnati" [value]="ruolo.id">
+                  {{ ruolo.nome }}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
       
-        <button mat-raised-button 
-        color="primary"
-        [disabled]="!newDipendente.nome || 
-                   selectedRuoliForNewDipendente.length === 0 || 
-                   !unita" 
-                (click)="addDipendente()">
-            Aggiungi Dipendente
-        </button>
-      </div>
+      <button [disabled]="!selectedDipendenteId || !selectedRuoloIdForDipendente"
+              (click)="creaDipendenteEAssegnaRuolo()">
+          Assegna Dipendente a Ruolo
+      </button>
+  
+      <!-- Sezione per creare un nuovo dipendente e assegnarlo a un ruolo -->
+      <h3>Crea e Assegna Nuovo Dipendente a Ruolo</h3>
+      <input type="text" placeholder="Nome del Dipendente" [(ngModel)]="newDipendente.nome" />
+      <mat-form-field appearance="fill">
+          <mat-label>Seleziona Ruolo</mat-label>
+          <mat-select [(ngModel)]="selectedRuoloIdForNewDipendente">
+              <mat-option>Seleziona un ruolo</mat-option>
+              <mat-option *ngFor="let ruolo of ruoliAssegnati" [value]="ruolo.id">
+                  {{ ruolo.nome }}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+      <button [disabled]="!newDipendente.nome || !selectedRuoloIdForNewDipendente"
+              (click)="creaDipendenteEAssegnaRuolo()">
+          Crea e Assegna Nuovo Dipendente
+      </button>
+  </div>
+    
   
   <div class="loading-message" *ngIf="!unita">
     <p>Caricamento dettagli...</p>

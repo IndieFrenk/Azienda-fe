@@ -18,7 +18,16 @@ h2 {
 :host ::ng-deep .organization-chart {
   padding: 30px 0;
 }
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content .pi-trash {
+  color: #e74c3c; /* Colore rosso per l'icona del cestino */
+  font-size: 1.2em; /* Dimensione dell'icona */
+  cursor: pointer; /* Cambia il cursore in puntatore quando si passa sopra */
+  transition: color 0.3s ease; /* Transizione per il colore dell'icona */
+}
 
+:host ::ng-deep .p-organizationchart .p-organizationchart-node-content .pi-trash:hover {
+  color: #c0392b; /* Colore più scuro quando si passa sopra l'icona */
+}
 /* Stili per i nodi */
 :host ::ng-deep .p-organizationchart .p-organizationchart-node-content {
   background: #ffffff;
