@@ -37,9 +37,9 @@ export class UnitaDettaglioComponent implements OnInit {
   displayedColumnsDipendenti: string[] = ['Nome', 'Azioni'];
   selectedRuoloIdForNewDipendente: number | null = null;
   selectedDipendenteId: number | null = null;
-  unitaT: any; // Dati dell'unità
-  ruoliT: any[] | undefined; // Lista dei ruoli
-  dipendentiUnitaT: any[] | undefined; // Lista dei dipendenti
+  unitaT: any;
+  ruoliT: any[] | undefined; 
+  dipendentiUnitaT: any[] | undefined; 
   displayedColumns: string[] = ['ruolo', 'dipendente'];
   id = 0
   constructor(
@@ -59,7 +59,6 @@ export class UnitaDettaglioComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     this.ruoliConDipendentiT.data = this.ruoli.map(ruolo => {
-      // Usa un array vuoto se `this.listaDipendenti[ruolo.id]` è undefined
       const dipendenti = this.listaDipendenti[ruolo.id] ?? []; 
       return { ruolo: ruolo.nome, dipendenti: dipendenti, id: ruolo.id };
     });
@@ -95,7 +94,7 @@ export class UnitaDettaglioComponent implements OnInit {
       (err) => {
         console.error('Errore nel caricamento dell\'unità:', err);
       }
-    ); //sistemare tabella con ruoli e dipendenti
+    ); 
   }
   loadDipendentiUnita(unitaId: number): void {
     const ruoliDipendentiPromises = this.ruoli.map(ruolo => {
@@ -103,7 +102,6 @@ export class UnitaDettaglioComponent implements OnInit {
         .then(dipendenti => {
           if (dipendenti){
             this.dipendentiUnita = dipendenti;
-          // Mappa i dipendenti per ruolo
           this.listaDipendenti[ruolo.id] = dipendenti;
           }
           return { id: ruolo.id, ruolo: ruolo.nome, dipendenti: dipendenti };
@@ -114,14 +112,13 @@ export class UnitaDettaglioComponent implements OnInit {
         });
       });
 
-      // Una volta completate tutte le promesse, aggiorna `ruoliConDipendentiT`
       Promise.all(ruoliDipendentiPromises).then((ruoliConDipendenti) => {
         this.ruoliConDipendentiT.data = ruoliConDipendenti;
         console.log('Ruoli con dipendenti aggiornati:', this.ruoliConDipendentiT.data);
       });
   }
   deleteRole(ruoloId: number): void {
-    console.log('Deleting role with ID:', ruoloId); // Log di controllo
+    console.log('Deleting role with ID:', ruoloId);
     this.organigrammaService.rimuoviRuolo(this.id, ruoloId).subscribe(
       () => this.loadRuoliUnita(this.unita!.id),
       (err) => console.error('Errore nella rimozione del ruolo:', err)
@@ -164,7 +161,6 @@ export class UnitaDettaglioComponent implements OnInit {
 
   assignRoleToUnit(): void {
     if (this.selectedRuoloId && this.unita) {
-      // Converti selectedRuoloId in numero se non lo è già
       const ruoloId = Number(this.selectedRuoloId);
       const ruoloSelezionato = this.availableRuoli.find(r => r.id === ruoloId);
       
@@ -190,7 +186,7 @@ export class UnitaDettaglioComponent implements OnInit {
     if (this.newRoleName && this.unita) {
       this.organigrammaService.createRuoloPerUnita(this.unita.id, this.newRoleName).subscribe(
         () => {
-          this.loadAvailableRoles(); // Ricarica tutti i ruoli disponibili
+          this.loadAvailableRoles(); 
           this.loadRuoliUnita(this.unita!.id);
           this.newRoleName = '';
         },
@@ -215,7 +211,7 @@ export class UnitaDettaglioComponent implements OnInit {
   }
   addDipendente(): void {
     if (this.newDipendente.nome && this.unita && this.selectedRuoliForNewDipendente.length > 0) {
-      // Create the request payload matching the backend structure
+     
       const requestPayload = {
         nome: this.newDipendente.nome,
         unita: this.unita.id,
@@ -226,20 +222,17 @@ export class UnitaDettaglioComponent implements OnInit {
         .subscribe(
           (dipendente) => {
             this.loadDipendentiUnita(this.unita!.id);
-            // Reset form
-            //this.newDipendente = { id: 0, nome: '', ruoli: [], unita: 0 };
-            //this.selectedRuoliForNewDipendente = [];
+           
           },
           (error) => {
             console.error('Errore durante la creazione del dipendente:', error);
-            // You might want to add user feedback here, like a toast notification
+           
           }
         );
     }
   }
   
 
-  // Helper method to toggle role selection for new employee
   toggleRuoloSelection(ruoloId: number): void {
     const index = this.selectedRuoliForNewDipendente.indexOf(ruoloId);
     if (index === -1) {
@@ -249,7 +242,6 @@ export class UnitaDettaglioComponent implements OnInit {
     }
   }
 
-  // Helper method to check if a role is selected for new employee
   isRuoloSelectedForNew(ruoloId: number): boolean {
     return this.selectedRuoliForNewDipendente.includes(ruoloId);
   }
@@ -270,10 +262,10 @@ export class UnitaDettaglioComponent implements OnInit {
     }
   }
 
-  // Metodo per creare e assegnare un nuovo dipendente a un ruolo
+ 
   creaDipendenteEAssegnaRuolo(): void {
   if (this.newDipendente.nome && this.selectedRuoloIdForNewDipendente && this.unita) {
-    // Crea un nuovo dipendente e assegnagli un ruolo
+    
     const requestPayload = {
       nome: this.newDipendente.nome,
       unita: this.unita.id,
@@ -292,7 +284,7 @@ export class UnitaDettaglioComponent implements OnInit {
         }
       );
   } else if (this.selectedDipendenteId && this.selectedRuoloIdForDipendente) {
-    // Assegna un ruolo a un dipendente esistente
+  
     const requestPayload = {
       id: this.selectedDipendenteId,
       nome: this.newDipendente.nome,

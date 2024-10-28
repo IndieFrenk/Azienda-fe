@@ -69,17 +69,16 @@
     box-shadow: 0 0 5px rgba(41,128,185,0.2);
   }
   
-  button {
+  button{
     background: #2980b9;
     color: white;
-    border: none;
-    padding: 12px 24px;
+    padding: 10px;
+    
     border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
-    font-weight: bold;
     transition: all 0.3s ease;
-    margin-top: 10px;
+    
   }
   
   button:hover {
@@ -88,7 +87,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
-  /* Loading state */
+  
   .loading-message {
     text-align: center;
     color: #7f8c8d;
@@ -99,7 +98,7 @@
     margin: 20px 0;
   }
   
-  /* Responsive design */
+  
   @media screen and (max-width: 768px) {
     .unit-details-container {
       padding: 10px;

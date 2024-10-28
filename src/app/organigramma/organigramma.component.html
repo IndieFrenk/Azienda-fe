@@ -1,16 +1,19 @@
 <div class="container">
   <h2>Organigramma Aziendale</h2>
-  <button mat-button color="primary" (click)="openDialog()">Aggiungi Unità Organizzativa</button>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Seleziona Unità Foglia da Eliminare</mat-label>
+  <h5>Aggiungi un unit&agrave; organizzativa all'organigramma sottostante</h5>
+  <button type="button" class="btn btn-primary" (click)="openDialog()">Aggiungi Unità Organizzativa</button>
+  <br><br>
+  <h5>Seleziona un'unit&agrave; organizzativa da eliminare</h5>
+  <mat-form-field appearance="outline">
+    <mat-label>Elimina unità</mat-label>
     <mat-select [(value)]="selectedLeafNode" (selectionChange)="onLeafNodeSelect()">
       <mat-option *ngFor="let leaf of leafNodes" [value]="leaf">
         {{ leaf.label }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button mat-button color="warn" (click)="deleteSelectedLeafNode()">Elimina Unità Foglia</button>
+  <button style="padding: 15px; margin-left: 10px;" type="button" class="btn btn-danger" (click)="deleteSelectedLeafNode()">Elimina Unit&agrave; Foglia <i class="bi bi-trash"></i></button><br><br>
+  <div class="container" style="box-shadow: 0px 0px 31px 5px rgba(0,0,0,0.46);; border-radius: 3px;">
   <div *ngFor="let rootNode of nodi">
     <p-organizationChart 
       [value]="[rootNode]" 
@@ -20,5 +23,5 @@
       
     </p-organizationChart>
   </div>
-  
+</div>
 </div>

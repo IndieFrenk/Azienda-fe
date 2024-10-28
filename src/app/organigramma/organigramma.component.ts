@@ -23,7 +23,7 @@ export class OrganigrammaComponent implements OnInit {
   nodi: TreeNode[] = [];
   selectedUnita: UnitaOrganizzativa | null = null;
   unita: UnitaOrganizzativa | null = null;
-  leafNodes: TreeNode[] = []; // Nodi foglia disponibili per la cancellazione
+  leafNodes: TreeNode[] = []; 
   selectedLeafNode: TreeNode | null = null;
   addUnita: UnitaOrganizzativa ={
     id: 0,
@@ -48,7 +48,7 @@ export class OrganigrammaComponent implements OnInit {
     this.getDipendenti();
   }
 
-  // Load all roles
+
   loadRuoli(): void {
     this.organigrammaService.getRuoli().subscribe(
       (resp) => {
@@ -64,9 +64,9 @@ export class OrganigrammaComponent implements OnInit {
     this.leafNodes = [];
     const checkLeafNodes = (node: TreeNode) => {
       if (!node.children || node.children.length === 0) {
-        this.leafNodes.push(node); // Se è un nodo foglia, aggiungilo a leafNodes
+        this.leafNodes.push(node);
       } else {
-        node.children.forEach(checkLeafNodes); // Altrimenti, esplora i figli
+        node.children.forEach(checkLeafNodes);
       }
     };
     nodes.forEach(checkLeafNodes);
@@ -80,13 +80,13 @@ export class OrganigrammaComponent implements OnInit {
     if (this.selectedLeafNode) {
       this.organigrammaService.deleteUnita(this.selectedLeafNode.data.id).subscribe(
         () => {
-          // Aggiorna le unità organizzative e i nodi dopo l'eliminazione
+         
           this.unitaOrganizzative = this.unitaOrganizzative.filter(
             (u) => u.id !== this.selectedLeafNode?.data.id
           );
           this.nodi = this.formatOrganizationalData(this.unitaOrganizzative);
-          this.findLeafNodes(this.nodi); // Aggiorna i nodi foglia
-          this.selectedLeafNode = null; // Resetta la selezione
+          this.findLeafNodes(this.nodi); 
+          this.selectedLeafNode = null; 
         },
         (err) => console.error('Error deleting leaf node:', err)
       );
@@ -103,7 +103,7 @@ export class OrganigrammaComponent implements OnInit {
             this.unitaOrganizzativeComplete = detailedUnits;
             this.unitaOrganizzative = this.unitaOrganizzativeComplete;
             this.nodi = this.formatOrganizationalData(this.unitaOrganizzativeComplete);
-            this.findLeafNodes(this.nodi); // Popola i nodi foglia
+            this.findLeafNodes(this.nodi); 
           },
           (err) => console.error('Error loading detailed unit information:', err)
         );
@@ -125,7 +125,6 @@ export class OrganigrammaComponent implements OnInit {
   formatOrganizationalData(units: UnitaOrganizzativa[]): TreeNode[] {
     const unitsMap = new Map<number, TreeNode>();
   
-    // Create nodes for all units first
     units.forEach(unit => {
       const node: TreeNode = {
         label: unit.nome,
@@ -141,7 +140,7 @@ export class OrganigrammaComponent implements OnInit {
       unitsMap.set(unit.id, node);
     });
   
-    // Process parent-child relationships
+
     const rootNodes: TreeNode[] = [];
     units.forEach(unit => {
       const node = unitsMap.get(unit.id);
@@ -162,14 +161,14 @@ export class OrganigrammaComponent implements OnInit {
   }
   deleteDipendente(dipendenteId: number): void {
     console.log(`Deleting employee with ID ${dipendenteId}`);
-    // Implement delete functionality here, if required
+   
   }
 
   deleteRuolo(ruoloId: number): void {
     console.log(`Deleting role with ID ${ruoloId}`);
-    // Implement delete functionality here, if required
+   
   }
-  // Retrieve organizational unit by ID
+
   getUnitaById(id: number) {
     this.organigrammaService.getUnitaById(id).subscribe(
       (resp) => {
@@ -222,19 +221,7 @@ export class OrganigrammaComponent implements OnInit {
     }
   }
 
-  // Update a role by ID
- /* updateRuolo(id: number, updatedRuolo: Ruolo): void {
-    this.organigrammaService.updateRuolo(id, updatedRuolo).subscribe(
-      (resp) => {
-        const index = this.ruoli.findIndex((r) => r.id === id);
-        if (index !== -1) this.ruoli[index] = resp;
-        console.log(`Role ID ${id} updated:`, resp);
-      },
-      (err) => {
-        console.error(`Error updating role ID ${id}:`, err);
-      }
-    );
-  }*/
+  
 
 
 
@@ -262,7 +249,7 @@ export class OrganigrammaComponent implements OnInit {
     this.organigrammaService.createUnita(unita).subscribe(
       (resp) => {
         console.log('Unità organizzativa aggiunta:', resp);
-        this.loadOrganigramma(); // Ricarica i dati per aggiornare l'organigramma
+        this.loadOrganigramma(); 
       },
       (err) => {
         console.error('Errore durante l\'aggiunta dell\'unità organizzativa:', err);

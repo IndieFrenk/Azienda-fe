@@ -26,7 +26,7 @@ export class AggiungiUnitaComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (form.valid) {
-      this.dialogRef.close(this.unita); // Restituisce i dati al componente principale
+      this.dialogRef.close(this.unita);
     }
   }
 }
