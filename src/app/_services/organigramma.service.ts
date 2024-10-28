@@ -53,14 +53,19 @@ export class OrganigrammaService {
   // =======================
   // SEZIONE DIPENDENTI
   // =======================
-
+  getAllDipendenti(): Observable<Dipendente[]> {
+    return this.http.get<Dipendente[]>(`${this.apiUrl}/dipendenti`);
+  }
   getRuoliDipendente(dipendenteId: number): Observable<Ruolo[]> {
     return this.http.get<Ruolo[]>(`${this.apiUrl}/dipendenti/${dipendenteId}/ruoli`);
   }
-  getRuoliDipendenteUnita(dipendenteId: number , ruoloId : number): Observable<Dipendente[]> {
-    return this.http.get<Dipendente[]>(`${this.apiUrl}/${ruoloId}/${dipendenteId}/dipendenti`);
+  getRuoliDipendenteUnita(unitaId: number , ruoloId : number): Observable<Dipendente[]> {
+    return this.http.get<Dipendente[]>(`${this.apiUrl}/${unitaId}/${ruoloId}/dipendenti`);
   }
- 
+  getDipendentiNonAssegnatiAUnita(unitaId: number): Observable<Dipendente[]> {
+    return this.http.get<Dipendente[]>(`${this.apiUrl}/${unitaId}/dipendenti`);
+  }
+  
   getDipendentiUnitaWithRoles(unitaId: number): Observable<Dipendente[]> {
     return this.getDipendentiUnita(unitaId).pipe(
       switchMap(dipendenti => {
@@ -126,7 +131,9 @@ export class OrganigrammaService {
   // =======================
   // SEZIONE RUOLI
   // =======================
-
+  getAllRuoli(): Observable<Ruolo[]> {
+    return this.http.get<Ruolo[]>(`${this.apiUrl}/ruoli`);
+  }
   aggiungiRuolo(unitaId: number, nomeRuolo: string): Observable<Ruolo> {
     return this.http.post<Ruolo>(`${this.apiUrl}/${unitaId}/ruoli`, nomeRuolo);
   }
