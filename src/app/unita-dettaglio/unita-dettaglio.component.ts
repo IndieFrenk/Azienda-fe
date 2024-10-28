@@ -24,6 +24,7 @@ export class UnitaDettaglioComponent implements OnInit {
   selectedRuoloId: number | null = null;
   newRoleName: string = '';
   filteredDipendenti: Dipendente[] = [];
+  displayedColumnsRuoli: string[] = ['Ruolo','Azioni'];
   ruoliConDipendenti: { [ruolo: string]: Dipendente[] } = {};
   selectedRuoliForNewDipendente: number[] = [];
   selectedRuoloIdForDipendente: number | null = null;
@@ -60,7 +61,7 @@ export class UnitaDettaglioComponent implements OnInit {
     this.ruoliConDipendentiT.data = this.ruoli.map(ruolo => {
       // Usa un array vuoto se `this.listaDipendenti[ruolo.id]` è undefined
       const dipendenti = this.listaDipendenti[ruolo.id] ?? []; 
-      return { ruolo: ruolo.nome, dipendenti: dipendenti };
+      return { ruolo: ruolo.nome, dipendenti: dipendenti, id: ruolo.id };
     });
     console.log('Ruoli con dipendenti:', this.ruoliConDipendentiT.data);
   }
@@ -105,7 +106,7 @@ export class UnitaDettaglioComponent implements OnInit {
           // Mappa i dipendenti per ruolo
           this.listaDipendenti[ruolo.id] = dipendenti;
           }
-          return { ruolo: ruolo.nome, dipendenti: dipendenti };
+          return { id: ruolo.id, ruolo: ruolo.nome, dipendenti: dipendenti };
         })
         .catch(err => {
           console.error('Errore nel caricamento dei dipendenti:', err);
@@ -119,6 +120,14 @@ export class UnitaDettaglioComponent implements OnInit {
         console.log('Ruoli con dipendenti aggiornati:', this.ruoliConDipendentiT.data);
       });
   }
+  deleteRole(ruoloId: number): void {
+    console.log('Deleting role with ID:', ruoloId); // Log di controllo
+    this.organigrammaService.rimuoviRuolo(this.id, ruoloId).subscribe(
+      () => this.loadRuoliUnita(this.unita!.id),
+      (err) => console.error('Errore nella rimozione del ruolo:', err)
+    );
+  }
+  
   
   loadRuoliUnita(unitaId: number): void {
     this.organigrammaService.getRuoliUnita(unitaId).pipe(
@@ -137,14 +146,7 @@ export class UnitaDettaglioComponent implements OnInit {
       (err) => console.error('Errore nel caricamento dei ruoli:', err)
     );
   }
-  deleteRole(ruoloId: number): void {
-     // Optional chaining to access id only if unita is not null
-      this.organigrammaService.rimuoviRuolo(this.id, ruoloId).subscribe(
-        () => this.loadRuoliUnita(this.unita!.id),
-        (err) => console.error('Errore nella rimozione del ruolo:', err)
-      );
-    
-  }
+ 
   
   
 
