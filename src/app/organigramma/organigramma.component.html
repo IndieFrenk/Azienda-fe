@@ -2,13 +2,23 @@
   <h2>Organigramma Aziendale</h2>
   <button mat-button color="primary" (click)="openDialog()">Aggiungi Unità Organizzativa</button>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Seleziona Unità Foglia da Eliminare</mat-label>
+    <mat-select [(value)]="selectedLeafNode" (selectionChange)="onLeafNodeSelect()">
+      <mat-option *ngFor="let leaf of leafNodes" [value]="leaf">
+        {{ leaf.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-button color="warn" (click)="deleteSelectedLeafNode()">Elimina Unità Foglia</button>
   <div *ngFor="let rootNode of nodi">
     <p-organizationChart 
       [value]="[rootNode]" 
       selectionMode="single" 
       class="organization-chart" 
       (onNodeSelect)="goToUnitaDettaglio($event.node.data.id)">
-     
+      
     </p-organizationChart>
   </div>
+  
 </div>

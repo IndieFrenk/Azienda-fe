@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { OrganigrammaService } from '../_services/organigramma.service';
 import { UnitaOrganizzativa } from '../_models/unitaOrganizzativa.model';
@@ -21,7 +21,10 @@ export class OrganigrammaComponent implements OnInit {
   unitaOrganizzative: UnitaOrganizzativa[] = [];
   unitaOrganizzativeComplete: UnitaOrganizzativa[] = [];
   nodi: TreeNode[] = [];
+  selectedUnita: UnitaOrganizzativa | null = null;
   unita: UnitaOrganizzativa | null = null;
+  leafNodes: TreeNode[] = []; // Nodi foglia disponibili per la cancellazione
+  selectedLeafNode: TreeNode | null = null;
   addUnita: UnitaOrganizzativa ={
     id: 0,
     nome: '',
@@ -38,7 +41,7 @@ export class OrganigrammaComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router
   ) {}
-
+  
   ngOnInit(): void {
     this.loadRuoli();
     this.loadOrganigramma();
@@ -57,7 +60,40 @@ export class OrganigrammaComponent implements OnInit {
       }
     );
   }
+  findLeafNodes(nodes: TreeNode[]): void {
+    this.leafNodes = [];
+    const checkLeafNodes = (node: TreeNode) => {
+      if (!node.children || node.children.length === 0) {
+        this.leafNodes.push(node); // Se è un nodo foglia, aggiungilo a leafNodes
+      } else {
+        node.children.forEach(checkLeafNodes); // Altrimenti, esplora i figli
+      }
+    };
+    nodes.forEach(checkLeafNodes);
+  }
 
+  onLeafNodeSelect(): void {
+    console.log(`Selected leaf node for deletion: ${this.selectedLeafNode?.data?.id}`);
+  }
+
+  deleteSelectedLeafNode(): void {
+    if (this.selectedLeafNode) {
+      this.organigrammaService.deleteUnita(this.selectedLeafNode.data.id).subscribe(
+        () => {
+          // Aggiorna le unità organizzative e i nodi dopo l'eliminazione
+          this.unitaOrganizzative = this.unitaOrganizzative.filter(
+            (u) => u.id !== this.selectedLeafNode?.data.id
+          );
+          this.nodi = this.formatOrganizationalData(this.unitaOrganizzative);
+          this.findLeafNodes(this.nodi); // Aggiorna i nodi foglia
+          this.selectedLeafNode = null; // Resetta la selezione
+        },
+        (err) => console.error('Error deleting leaf node:', err)
+      );
+    } else {
+      console.warn('Nessun nodo foglia selezionato per l\'eliminazione.');
+    }
+  }
   loadOrganigramma(): void {
     this.organigrammaService.getUnitaOrganizzative().subscribe(
       (unitaList) => {
@@ -67,7 +103,7 @@ export class OrganigrammaComponent implements OnInit {
             this.unitaOrganizzativeComplete = detailedUnits;
             this.unitaOrganizzative = this.unitaOrganizzativeComplete;
             this.nodi = this.formatOrganizationalData(this.unitaOrganizzativeComplete);
-            console.log('Formatted organizational data:', this.nodi);
+            this.findLeafNodes(this.nodi); // Popola i nodi foglia
           },
           (err) => console.error('Error loading detailed unit information:', err)
         );
@@ -169,34 +205,22 @@ export class OrganigrammaComponent implements OnInit {
 
 
 
-  // Delete an organizational unit
-  deleteUnitaOrganizzativa(id: number): void {
-    this.getUnitaById(id);
-    this.delUnita = this.unita
-    if (this.delUnita?.unitaSottostanti.length === 0) {
-    this.organigrammaService.deleteUnita(id).subscribe(
-      () => {
-        this.unitaOrganizzative = this.unitaOrganizzative.filter((u) => u.id !== id);
-        console.log(`Unit with ID ${id} deleted successfully.`);
-      },
-      (err) => {
-        console.error(`Error deleting unit with ID ${id}:`, err);
-      }
-    );
+  deleteUnitaOrganizzativa(): void {
+    if (this.selectedUnita && this.selectedUnita.unitaSottostanti.length === 0) {
+      this.organigrammaService.deleteUnita(this.selectedUnita.id).subscribe(
+        () => {
+          this.unitaOrganizzative = this.unitaOrganizzative.filter((u) => u.id !== this.selectedUnita?.id);
+          this.nodi = this.formatOrganizationalData(this.unitaOrganizzative);
+          this.selectedUnita = null;
+        },
+        (err) => {
+          console.error('Error deleting organizational unit:', err);
+        }
+      );
+    } else {
+      console.error('Impossibile eliminare un\'unità organizzativa con sottounità.');
+    }
   }
-  }
-
-
-
-
-
-
-
- 
-
-
-
-
 
   // Update a role by ID
  /* updateRuolo(id: number, updatedRuolo: Ruolo): void {
@@ -247,3 +271,4 @@ export class OrganigrammaComponent implements OnInit {
   }
   
 }
+
