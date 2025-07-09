@@ -15,7 +15,7 @@ export class AuthService {
   //public loggedInUserSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
   //loggedInUserId = this.loggedInUserSubject.asObservable();
   private http : HttpClient;
-  
+
   constructor(   private router:Router, private handler:HttpBackend, private storageService: StorageService  ) {
     this.http = new HttpClient(handler);
   }
@@ -25,22 +25,22 @@ export class AuthService {
   }
   isLogged(){ return this.storageService.isLoggedIn()  }
   login(login:FormData) {
-    return this.http.post<any>("http://localhost:8080/auth/login", login)
+    return this.http.post<any>("http://localhost:7777/auth/login", login)
   }
   register(register:FormData) {
-    return this.http.post<any>("http://localhost:8080/auth/signup", register)
+    return this.http.post<any>("http://localhost:7777/auth/signup", register)
   }
   logout(): Observable<any> {
-    return this.http.post("http://localhost:8080/auth/signout", {withCredentials: true});
+    return this.http.post("http://localhost:7777/auth/signout", {withCredentials: true});
   }
   refreshToken() {
-    return this.http.post("http://localhost:8080/auth/refreshtoken",{}, {withCredentials: true});
+    return this.http.post("http://localhost:7777/auth/refreshtoken",{}, {withCredentials: true});
     }
 
   changePassword(changePass:ChangePass){
-    return this.http.post<any>("http://localhost:8080/auth/changePass", changePass)
+    return this.http.post<any>("http://localhost:7777/auth/changePass", changePass)
   }
   recoverPass(recover:FormData){
-    return this.http.post<any>("http://localhost:8080/auth/recoverPass", recover)
+    return this.http.post<any>("http://localhost:7777/auth/recoverPass", recover)
   }
   }

@@ -1,27 +1,79 @@
-# FEEDFe
+# Azienda Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+Un'applicazione web Angular per la gestione aziendale con sistema di autenticazione e feedback.
 
-## Development server
+## Tecnologie Utilizzate
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular** - Framework frontend
+- **TypeScript** - Linguaggio di programmazione
+- **JavaScript** - Linguaggio di supporto
+- **NPM** - Package manager
+- **Angular Material** - UI components (con date adapter personalizzato)
 
-## Code scaffolding
+## Struttura del Progetto
+src/ ├── app/ │ 
+     ├── _models/ # Modelli di dati │ 
+     ├── _services/ # Servizi per API e business logic │ 
+     ├── admin/ # Componenti amministrazione │ 
+     ├── auth/ # Gestione autenticazione │ 
+     ├── feedback/ # Sistema feedback │ 
+     ├── user/ # Gestione utenti │ 
+     └── shared/ # Componenti condivisi 
+          ├── assets/ # Risorse statiche 
+          └── public/ # Immagini e risorse pubbliche
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Funzionalità di Sicurezza
+Interceptor per gestione automatica token
+Guard per protezione route
+Gestione sicura dello storage
+Validazione form con Angular Reactive Forms
 
-## Build
+##  Responsive Design
+L'applicazione è ottimizzata per diversi dispositivi con un design responsive.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Funzionalità Principali
 
-## Running unit tests
+### Autenticazione
+- Login e registrazione utenti
+- Recupero password
+- Cambio password
+- Refresh token automatico
+- Guard per protezione route
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Gestione Utenti
+- Visualizzazione lista utenti
+- Dettagli utente
+- Ricerca utenti
+- Pagina profilo personale
 
-## Running end-to-end tests
+### Sistema Feedback
+- Invio feedback
+- Visualizzazione lista feedback
+- Dettagli feedback
+- Gestione risposte
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Amministrazione
+- Pannello admin
+- Gestione utenti e permessi
 
-## Further help
+## Servizi Backend
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+L'applicazione si connette a un server backend su `http://localhost:7777` con i seguenti endpoint:
+
+- `/auth/login` - Login utente
+- `/auth/signup` - Registrazione
+- `/auth/signout` - Logout
+- `/auth/refreshtoken` - Refresh token
+- `/auth/changePass` - Cambio password
+- `/auth/recoverPass` - Recupero password
+
+## Installazione
+
+1. Clona il repository
+2. Installa le dipendenze:
+   ```bash
+   npm install
+   ng serve
+   ## L'applicazione sarà disponibile su http://localhost:4200
+   
+   
